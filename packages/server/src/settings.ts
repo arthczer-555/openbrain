@@ -89,7 +89,8 @@ export interface ChatbotSettings {
   logoUrl: string | null;
   kbLanguage: string;
   mode: "auto" | "agent" | "retrieval_first";
-  auth: { mode: AuthMode; allowedDomains: string[]; identified: boolean };
+  /** The configured mode ("open" is never configured: AppContext.authMode derives it from the environment). */
+  auth: { mode: Exclude<AuthMode, "open">; allowedDomains: string[]; identified: boolean };
   budgets: { monthlyUsd: number; questionsPerUserPerDay: number };
   chat: ModelConfigLike;
   fallback: ModelConfigLike[];

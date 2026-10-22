@@ -59,7 +59,7 @@ Every fix you make this way deserves a golden question, see [Evals](/docs/operat
 | Symptom | Fix |
 |---|---|
 | `SESSION_SECRET is not set on the server` | Re-run `deploy --yes`, or set it on Netlify (a long random string). |
-| `ACCESS_CODE_HASH is not set on the server` | `passcode` mode needs it: `auth hash-code`, then set the hash on Netlify. |
+| `ACCESS_CODE_HASH is not set on the server` | `passcode` mode needs it: `auth hash-code`, then set the hash on Netlify. For a chat without access code, set `OPENBRAIN_OPEN_ACCESS=1` instead. |
 | `too many attempts` | 5 failed sign-ins in 15 minutes from the same IP: wait, then try again. |
 | `daily limit of 100 questions reached` | Per-user quota: raise `budgets.questions_per_user_per_day`. |
 | `the monthly budget of the chatbot is reached` | Raise `budgets.monthly_usd`, or wait for next month. |

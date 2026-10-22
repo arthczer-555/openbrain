@@ -105,6 +105,44 @@ describe("auth", () => {
     expect(blocked.headers.get("retry-after")).not.toBeNull();
   });
 
+  it("lets visitors in without a sign-in page when the deploy set no access code", async () => {
+    const app = makeApp({ env: { SESSION_SECRET: "test-secret", ADMIN_CODE_HASH: adminHash, OPENBRAIN_OPEN_ACCESS: "1" } });
+    const first = await app(get("/api/config"));
+    const config = (await first.json()) as PublicConfig;
+    expect(config).toMatchObject({ authMode: "open", user: { isAdmin: false } });
+    const cookie = (first.headers.get("set-cookie") ?? "").split(";")[0] ?? "";
+    expect(cookie).toMatch(/^ob_session=/);
+    // A second load keeps the same pseudonymous session.
+    const again = await app(get("/api/config", cookie));
+    expect(again.headers.get("set-cookie")).toBeNull();
+    expect(((await again.json()) as PublicConfig).user?.id).toBe(config.user?.id);
+
+    const events = await ask(app, cookie, "How do I add a user in the internal tool?");
+    expect(events.at(-1)).toMatchObject({ type: "done" });
+    // Without a cookie (blocked cookies, scripts) the chat still works, identified by IP.
+    expect((await app(post("/api/chat", { message: "hi" }), { ip: "10.0.0.2" })).status).toBe(200);
+    expect((await app(post("/api/auth/login", { code: "anything" }))).status).toBe(400);
+    // /admin still needs the admin code.
+    expect((await app(get("/api/admin/reports", cookie))).status).toBe(403);
+    const admin = await app(post("/api/auth/admin", { code: "acme-admin" }, cookie), { ip: "10.0.0.1" });
+    expect(admin.status).toBe(200);
+    const adminCookie = (admin.headers.get("set-cookie") ?? "").split(";")[0] ?? "";
+    expect((await app(get("/api/admin/reports", adminCookie))).status).toBe(200);
+  });
+
+  it("stays closed when the access code is missing without an explicit open access, and a code always wins", async () => {
+    const forgotten = makeApp({ env: { SESSION_SECRET: "test-secret", ADMIN_CODE_HASH: adminHash } });
+    const config = (await (await forgotten(get("/api/config"))).json()) as PublicConfig;
+    expect(config).toMatchObject({ authMode: "passcode", user: null });
+    expect((await forgotten(post("/api/chat", { message: "hi" }))).status).toBe(401);
+    expect((await forgotten(post("/api/auth/login", { code: "acme-team" }), { ip: "10.0.0.3" })).status).toBe(500);
+
+    const both = makeApp({ env: { SESSION_SECRET: "test-secret", ACCESS_CODE_HASH: accessHash, OPENBRAIN_OPEN_ACCESS: "1" } });
+    const bothConfig = await both(get("/api/config"));
+    expect(bothConfig.headers.get("set-cookie")).toBeNull();
+    expect((await bothConfig.json()) as PublicConfig).toMatchObject({ authMode: "passcode", user: null });
+  });
+
   it("refuses an open chatbot outside a local run", () => {
     const config = { ...bundle.config, auth: { mode: "none" } };
     expect(() => makeApp({ bundle: { ...bundle, config } })).toThrow(/refused outside local runs/);

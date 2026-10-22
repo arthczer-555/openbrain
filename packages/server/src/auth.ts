@@ -2,11 +2,20 @@ import type { AppContext } from "./context.ts";
 import { hashUser, randomId, sha256Hex, verifyCode } from "./crypto.ts";
 import { apiError, HttpError, isSecure, json, readJson, redirect, type RequestContext } from "./http.ts";
 import type { LoginRequest } from "./protocol.ts";
-import { clearSessionCookie, readCookie, SESSION_DAYS, sessionCookie, signSession, type Session } from "./session.ts";
+import {
+  clearSessionCookie,
+  readCookie,
+  SESSION_COOKIE,
+  SESSION_DAYS,
+  sessionCookie,
+  signSession,
+  verifySession,
+  type Session,
+} from "./session.ts";
 
-// Authentication: a shared access code by default (works on the free Netlify plan),
-// Google sign-in for companies on Google Workspace, an admin code or an admin email list for /admin.
-// Login attempts are limited to 5 per 15 minutes per IP.
+// Authentication: a shared access code by default (works on the free Netlify plan), or no code at all when
+// the deploy set none ("open"), Google sign-in for companies on Google Workspace, an admin code or an admin
+// email list for /admin. Login attempts are limited to 5 per 15 minutes per IP.
 
 const LOGIN_LIMIT = 5;
 const LOGIN_WINDOW_MS = 15 * 60_000;
@@ -42,6 +51,7 @@ async function checkCode(app: AppContext, ctx: RequestContext, kind: "access" | 
 }
 
 export async function handleLogin(app: AppContext, request: Request, ctx: RequestContext): Promise<Response> {
+  if (app.authMode === "open") return apiError(400, "wrong_mode", "this chatbot has no access code");
   if (app.settings.auth.mode !== "passcode") return apiError(400, "wrong_mode", `this chatbot uses ${app.settings.auth.mode} sign-in`);
   const body = await readJson<LoginRequest>(request);
   if (typeof body.code !== "string" || body.code.length === 0 || body.code.length > 200) return apiError(400, "bad_request", "code required");
@@ -50,6 +60,25 @@ export async function handleLogin(app: AppContext, request: Request, ctx: Reques
   // Shared code: no identity. Each sign-in gets its own pseudonymous id (quotas, "5 different people").
   const sub = await hashUser(app.deps.env.SESSION_SECRET ?? "", `passcode:${randomId()}`);
   return issueSession(app, request, { sub, email: null, name: null, admin: false });
+}
+
+/**
+ * Open mode (no access code): a visitor without a valid session gets a pseudonymous one, so quotas count per
+ * browser rather than per office IP. Returns the session and its cookie, or null when there is nothing to issue.
+ */
+export async function openSession(app: AppContext, request: Request): Promise<{ session: Session; cookie: string } | null> {
+  const secret = app.deps.env.SESSION_SECRET;
+  if (app.authMode !== "open" || !secret) return null;
+  const nowMs = app.now().getTime();
+  if (await verifySession(readCookie(request.headers.get("cookie"), SESSION_COOKIE), secret, nowMs)) return null;
+  const session: Session = {
+    sub: await hashUser(secret, `open:${randomId()}`),
+    email: null,
+    name: null,
+    admin: false,
+    exp: Math.floor(nowMs / 1000) + SESSION_DAYS * 86_400,
+  };
+  return { session, cookie: sessionCookie(await signSession(session, secret), isSecure(request) || !app.deps.local) };
 }
 
 /** Upgrades the current session to admin with ADMIN_CODE_HASH (passcode and netlify modes). */

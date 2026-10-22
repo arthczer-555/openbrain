@@ -14,8 +14,10 @@ const PUBLIC = [/^\/login\/?$/, /^\/assets\//, /^\/favicon\.svg$/, /^\/robots\.t
 
 export default async (request: Request, context: EdgeContext): Promise<Response> => {
   const url = new URL(request.url);
-  // Off when the site is protected by Netlify itself (auth mode "netlify") or for a public demo with fake data.
-  if (Netlify.env.get("OPENBRAIN_EDGE_GUARD") === "off" || PUBLIC.some((re) => re.test(url.pathname))) return context.next();
+  // Off when the site is protected by Netlify itself (auth mode "netlify"), for a public demo with fake data, or
+  // when the deploy set no access code (same rule as the server: a password, when set, always wins).
+  const open = Netlify.env.get("OPENBRAIN_OPEN_ACCESS") === "1" && !Netlify.env.get("ACCESS_CODE_HASH");
+  if (open || Netlify.env.get("OPENBRAIN_EDGE_GUARD") === "off" || PUBLIC.some((re) => re.test(url.pathname))) return context.next();
   const secret = Netlify.env.get("SESSION_SECRET") ?? "";
   const session = await verifySession(readCookie(request.headers.get("cookie"), SESSION_COOKIE), secret);
   if (session) return context.next();

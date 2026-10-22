@@ -33,7 +33,7 @@ intermediary: that is your choice to make.
 | Threat | Answer |
 |---|---|
 | **The mirror ends up in a public repo** | Instances are private copies. The provided CI fails when the repo is public and `knowledge/` is not empty; `doctor` and `deploy` check it too; the pre-push hook (`git config core.hooksPath .githooks`) runs `doctor` before every push. |
-| **Chatbot reachable without sign-in** | `auth.mode: none` is refused outside local runs; an edge function checks the session on every route; sessions are signed cookies; sign-in attempts are limited to 5 per 15 minutes per IP. |
+| **Chatbot reachable without sign-in** | `auth.mode: none` is refused outside local runs; a chat without access code is an explicit, confirmed choice at `deploy` (`OPENBRAIN_OPEN_ACCESS=1`), a missing `ACCESS_CODE_HASH` alone keeps it closed; an edge function checks the session on every route; sessions are signed cookies; sign-in attempts are limited to 5 per 15 minutes per IP. |
 | **Access codes leak** | Only their hashes (PBKDF2) are stored on Netlify; `deploy` shows the codes once. |
 | **A token leaks** | Notion and tool tokens live only in the operator's `.env` (or are their MCP connectors), never in Netlify, GitHub or a chat: `deploy` refuses to send them. Netlify builds from the committed mirror, without any token. |
 | **Writing too widely in Notion** | The integration token is read-only and shared on the root page only; `connectors test notion` warns about any page visible outside the tree. Writes go through your Notion connector in Claude Code, only after your go-ahead. Inputs stay read-only: write scopes are reported, write-like MCP tools are refused. |
@@ -48,7 +48,8 @@ intermediary: that is your choice to make.
 Run `npm run openbrain -- doctor`: it checks most of this list for you.
 
 - The instance repo is private.
-- An auth mode is set: `google` for companies on Google Workspace, `passcode` otherwise.
+- An auth mode is set: `google` for companies on Google Workspace, `passcode` otherwise. Leave the access code empty
+  only if anyone holding the link may read the knowledge base.
 - `SESSION_SECRET` and `ADMIN_TOKEN` are long random values.
 - The Notion integration is shared on the root page only, with no extra capability you do not need.
 - The input tokens are read-only.

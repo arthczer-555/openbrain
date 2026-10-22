@@ -18,7 +18,7 @@ import { knowledgeFromBundle, type RuntimeBundle } from "./bundle.ts";
 import { hashUser, timingSafeEqual, utf8 } from "./crypto.ts";
 import { HttpError, type RequestContext } from "./http.ts";
 import type { KVFactory } from "./kv.ts";
-import type { ModelOption, SessionUser } from "./protocol.ts";
+import type { AuthMode, ModelOption, SessionUser } from "./protocol.ts";
 import { readCookie, SESSION_COOKIE, verifySession, type Session } from "./session.ts";
 import { resolveSettings, type ChatbotSettings } from "./settings.ts";
 import { createStores, type Stores } from "./stores.ts";
@@ -42,6 +42,8 @@ export interface ServerDeps {
 export interface AppContext {
   deps: ServerDeps;
   settings: ChatbotSettings;
+  /** The sign-in in effect: settings.auth.mode, or "open" when the deploy set no password. */
+  authMode: AuthMode;
   stores: Stores;
   knowledge: KnowledgePort;
   registry: ProviderRegistry;
@@ -66,6 +68,15 @@ export function modelLabel(ref: { provider: string; model: string }, catalog: re
   return entry?.name ?? ref.model;
 }
 
+/**
+ * Passcode mode without a password is open only when the deploy said so (OPENBRAIN_OPEN_ACCESS=1):
+ * a forgotten ACCESS_CODE_HASH keeps the chatbot closed. A password, when set, always wins.
+ */
+export function effectiveAuthMode(settings: ChatbotSettings, env: Env): AuthMode {
+  if (settings.auth.mode === "passcode" && !env.ACCESS_CODE_HASH && env.OPENBRAIN_OPEN_ACCESS === "1") return "open";
+  return settings.auth.mode;
+}
+
 function bearer(request: Request): string | null {
   const header = request.headers.get("authorization");
   return header?.startsWith("Bearer ") ? header.slice(7).trim() : null;
@@ -76,6 +87,7 @@ export function createContext(deps: ServerDeps): AppContext {
   if (settings.auth.mode === "none" && !deps.local && deps.env.OPENBRAIN_ALLOW_NO_AUTH !== "1") {
     throw new Error('auth.mode "none" is refused outside local runs: the chatbot exposes internal knowledge');
   }
+  const authMode = effectiveAuthMode(settings, deps.env);
   const registry = createProviderRegistry(settings.openaiCompatible);
   const catalog = mergeCatalogs(builtinCatalog(), deps.bundle.models ?? [], deps.catalog ?? []);
   const stores = createStores(deps.kv);
@@ -88,8 +100,9 @@ export function createContext(deps: ServerDeps): AppContext {
     const token = readCookie(request.headers.get("cookie"), SESSION_COOKIE);
     const verified = await verifySession(token, secret, now().getTime());
     if (verified) return verified;
-    if (settings.auth.mode === "netlify") {
-      // The site is protected by Netlify itself: every visitor is a member, identified by IP hash for quotas.
+    if (authMode === "netlify" || authMode === "open") {
+      // Netlify protects the site itself, or there is no password: every visitor is let in. Without a session
+      // cookie (open mode issues one with /api/config), the visitor is identified by IP hash for quotas.
       return { sub: await hashUser(secret || "netlify", `ip:${ctx.ip ?? "unknown"}`), email: null, name: null, admin: false, exp: 0 };
     }
     return null;
@@ -98,6 +111,7 @@ export function createContext(deps: ServerDeps): AppContext {
   const context: AppContext = {
     deps,
     settings,
+    authMode,
     stores,
     knowledge,
     registry,

@@ -1,5 +1,5 @@
 import { handleMarkReports, handleModels, handleReports, handleTestModel, handleUpdateModels, handleUsage } from "./admin.ts";
-import { handleAdminLogin, handleGoogleCallback, handleGoogleStart, handleLogin, handleLogout, handleMe } from "./auth.ts";
+import { handleAdminLogin, handleGoogleCallback, handleGoogleStart, handleLogin, handleLogout, handleMe, openSession } from "./auth.ts";
 import { CHAT_LIMITS, handleChat, handleFeedback } from "./chat.ts";
 import { createContext, type AppContext, type ServerDeps } from "./context.ts";
 import { apiError, HttpError, json, type RequestContext } from "./http.ts";
@@ -33,7 +33,9 @@ const ROUTES: Record<string, Handler> = {
 };
 
 async function handleConfig(app: AppContext, request: Request, ctx: RequestContext): Promise<Response> {
-  const session = await app.session(request, ctx);
+  // No access code: the first load signs the visitor in, so the UI never shows a sign-in page.
+  const opened = await openSession(app, request);
+  const session = opened?.session ?? (await app.session(request, ctx));
   const { settings, deps } = app;
   const { option } = await app.chatModels();
   const overrides = await app.stores.settings.models();
@@ -47,7 +49,7 @@ async function handleConfig(app: AppContext, request: Request, ctx: RequestConte
     companyName: settings.companyName,
     accent: settings.accent,
     logoUrl: settings.logoUrl,
-    authMode: settings.auth.mode,
+    authMode: app.authMode,
     user: session ? app.sessionUser(session) : null,
     userChoice: {
       enabled: userChoice.enabled,
@@ -58,7 +60,7 @@ async function handleConfig(app: AppContext, request: Request, ctx: RequestConte
     demo: option.id.startsWith("demo:"),
     limits: { maxQuestionChars: CHAT_LIMITS.maxQuestionChars, maxTurns: CHAT_LIMITS.maxTurns },
   };
-  return json(body);
+  return json(body, 200, opened ? { "set-cookie": opened.cookie } : {});
 }
 
 async function handleHealth(app: AppContext): Promise<Response> {

@@ -33,19 +33,21 @@ You need the [Netlify CLI](https://docs.netlify.com/cli/get-started/) (`npm i -g
 
 ```bash
 npm run openbrain -- deploy                    # plan only: nothing leaves your machine
-npm run openbrain -- deploy --yes              # creates the site, sets the secrets, deploys
+npm run openbrain -- deploy --yes              # asks for the access code, creates the site, sets the secrets, deploys
 npm run openbrain -- deploy --yes --site acme-brain
+npm run openbrain -- deploy --yes --password "<code>"   # or --no-password, when nobody can answer the prompt
 ```
 
 Without `--yes`, `deploy` runs the checks (lint, guide, sign-in mode, private repo, the key of the chat model, Netlify
 CLI) and prints the plan. With `--yes` it:
 
-1. creates the Netlify site (or reuses the linked one) and links it;
-2. generates `SESSION_SECRET`, `ADMIN_TOKEN` and the codes, and sets the environment variables (the keys of your chat
+1. asks for the chat's access code (8 characters or more), or none after a confirmation (`passcode` mode);
+2. creates the Netlify site (or reuses the linked one) and links it;
+3. generates `SESSION_SECRET`, `ADMIN_TOKEN` and the admin code, and sets the environment variables (the keys of your chat
    models, the Google client in `google` mode). Source tokens such as `NOTION_TOKEN` are never sent;
-3. deploys to production;
-4. writes `OPENBRAIN_URL` and `ADMIN_TOKEN` to your local `.env`, for `reports` and the weekly update;
-5. prints the URL, the access code and the admin code **once**. They are stored only as hashes.
+4. deploys to production;
+5. writes `OPENBRAIN_URL` and `ADMIN_TOKEN` to your local `.env`, for `reports` and the weekly update;
+6. prints the URL, the access code and the admin code **once**. They are stored only as hashes.
 
 Share the URL and the access code with your team, keep the admin code.
 
@@ -68,16 +70,21 @@ site also sends strict security headers (Content-Security-Policy, no framing, no
 
 ## Sign-in modes
 
-The chatbot exposes internal knowledge: it is never public. `auth.mode: none` is refused outside local runs, and an edge
-function checks the session on every route.
+The chatbot exposes internal knowledge: it is closed by default. `auth.mode: none` is refused outside local runs, and an
+edge function checks the session on every route.
 
 | Mode | Netlify plan | For | Setup |
 |---|---|---|---|
-| `passcode` (default) | Every plan, free included | Small teams, getting started | One shared access code; `deploy` generates it, `auth hash-code` makes a new hash. Admins enter the admin code. |
+| `passcode` (default) | Every plan, free included | Small teams, getting started | One shared access code chosen at `deploy` (`auth hash-code` makes a new hash). Admins enter the admin code. |
 | `google` | Every plan | Companies on Google Workspace (recommended) | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ALLOWED_EMAIL_DOMAINS` (or `auth.allowed_domains`), `ADMIN_EMAILS`. |
 | `netlify` | Pro (password or private visibility) | Sites already protected by Netlify | Set `OPENBRAIN_EDGE_GUARD=off`. Admins enter the admin code. |
 
 Sessions are signed cookies valid 30 days. Sign-in attempts are limited to 5 per 15 minutes per IP.
+
+**No access code.** In `passcode` mode, leaving the code empty at `deploy` (or `--no-password`) sets
+`OPENBRAIN_OPEN_ACCESS=1`: the chat opens directly, with no sign-in page, and anyone with the link can read the
+knowledge base through it. Each browser gets its own pseudonymous session for the quotas; `/admin` still asks for the
+admin code. A missing `ACCESS_CODE_HASH` alone keeps the chatbot closed, and a code, when set, always wins.
 
 ## Limits and costs
 

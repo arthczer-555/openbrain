@@ -232,7 +232,7 @@ export function Chat({ config }: { config: PublicConfig }) {
             <IconGear />
             Admin
           </Link>
-          {config.authMode !== "none" && config.authMode !== "netlify" && (
+          {(config.authMode === "passcode" || config.authMode === "google") && (
             <button
               type="button"
               className="side-link"

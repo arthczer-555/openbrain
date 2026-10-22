@@ -15,7 +15,7 @@ happens during the [weekly update](/docs/concepts/weekly-update/), and the guard
 | Sign-in mode | Admins |
 |---|---|
 | `google` | The emails listed in `ADMIN_EMAILS`. |
-| `passcode`, `netlify` | Anyone who enters the admin code (`ADMIN_CODE_HASH`), shown once by `deploy`. |
+| `passcode` (with or without access code), `netlify` | Anyone who enters the admin code (`ADMIN_CODE_HASH`), shown once by `deploy`. |
 | Weekly update from the terminal | The `ADMIN_TOKEN` bearer token in your local `.env`. |
 
 ## Flagged questions

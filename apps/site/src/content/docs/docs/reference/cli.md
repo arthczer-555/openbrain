@@ -212,10 +212,11 @@ on). The Netlify build runs it; you rarely need it by hand.
 
 ```bash
 npm run openbrain -- deploy                  # plan only, nothing leaves the machine
-npm run openbrain -- deploy --yes [--site <name>]
+npm run openbrain -- deploy --yes [--site <name>] [--password <code> | --no-password]
 ```
 
-See [Deploy on Netlify](/docs/deploy/netlify/).
+With `--yes`, it asks for the chat's access code (empty = no sign-in page); `--password` or `--no-password` answers
+in advance, for runs without a terminal. See [Deploy on Netlify](/docs/deploy/netlify/).
 
 ### `reports`
 

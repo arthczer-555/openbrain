@@ -17,8 +17,10 @@ Until 1.0, only the latest release receives security fixes. Instances update wit
 
 - The knowledge mirror lives in the instance's **private** repository. `openbrain doctor`, `openbrain deploy`
   and the CI refuse a public repository that holds a non-empty mirror.
-- The chatbot is never public: a shared access code or Google sign-in, signed `HttpOnly` session cookies, an
-  edge guard on every page, the session checked again on every API call, login attempts limited per IP.
+- The chatbot is closed by default: a shared access code or Google sign-in, signed `HttpOnly` session cookies, an
+  edge guard on every page, the session checked again on every API call, login attempts limited per IP. A chat
+  without access code is an explicit choice at deploy (confirmed, `OPENBRAIN_OPEN_ACCESS=1`): a missing
+  `ACCESS_CODE_HASH` alone keeps it closed, and `/admin` always needs the admin code.
 - The chatbot cannot act: it reads a compiled index, has no tool that writes or calls the company's tools,
   renders no remote image and keeps links only towards the source pages.
 - Source tokens (Notion, Drive, GitHub, Slack) stay on the operator's machine. Netlify only holds the LLM key

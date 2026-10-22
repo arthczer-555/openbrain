@@ -17,7 +17,8 @@ Google sign-in variables. Set the optional ones (`OPENBRAIN_EDGE_GUARD`, the emb
 |---|---|---|
 | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `MISTRAL_API_KEY`, `OPENROUTER_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY`, `XAI_API_KEY` | At least one | The chat model and its fallbacks. Any variable named by `api_key_env` works too. |
 | `SESSION_SECRET` | Yes | Signs the session cookies (HMAC). `deploy` generates it. |
-| `ACCESS_CODE_HASH` | `passcode` mode | Hash of the shared access code (PBKDF2), never the code itself. `deploy` generates it; `auth hash-code` makes a new one. |
+| `ACCESS_CODE_HASH` | `passcode` mode | Hash of the shared access code (PBKDF2), never the code itself. `deploy` sets it from the code you choose; `auth hash-code` makes a new one. |
+| `OPENBRAIN_OPEN_ACCESS` | No | `1`: `passcode` mode without access code, no sign-in page. Only applies when `ACCESS_CODE_HASH` is empty. `deploy --no-password` sets it. |
 | `ADMIN_CODE_HASH` | `passcode` and `netlify` modes | Hash of the admin code. |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | `google` mode | Google OAuth client. Put them in your local `.env`: `deploy` copies them. |
 | `ALLOWED_EMAIL_DOMAINS` | `google` mode | Comma-separated domains allowed to sign in. |

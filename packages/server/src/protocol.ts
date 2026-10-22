@@ -2,7 +2,8 @@
 // Pure types, no imports: the web app imports this file directly.
 
 export type DocStatus = "validated" | "to_confirm" | "stale";
-export type AuthMode = "passcode" | "google" | "netlify" | "none";
+/** "open": passcode mode deployed without a password (no sign-in page, the admin code still guards /admin). */
+export type AuthMode = "passcode" | "google" | "netlify" | "none" | "open";
 export type ReportReason = "not_found" | "partial" | "contradiction" | "out_of_scope";
 
 // ---------- GET /api/config (public: the login page needs the name and the colors) ----------
