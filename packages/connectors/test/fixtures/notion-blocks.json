@@ -1,0 +1,129 @@
+{
+  "object": "list",
+  "next_cursor": null,
+  "has_more": false,
+  "results": [
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000001",
+      "type": "heading_1",
+      "has_children": false,
+      "heading_1": { "rich_text": [{ "type": "text", "plain_text": "Refund an invoice", "href": null, "annotations": { "bold": false, "italic": false, "strikethrough": false, "underline": false, "code": false } }], "is_toggleable": false }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000002",
+      "type": "paragraph",
+      "has_children": false,
+      "paragraph": {
+        "rich_text": [
+          { "type": "text", "plain_text": "Refund ", "href": null, "annotations": { "bold": false, "italic": false, "strikethrough": false, "underline": false, "code": false } },
+          { "type": "text", "plain_text": "within 30 days", "href": null, "annotations": { "bold": true, "italic": false, "strikethrough": false, "underline": false, "code": false } },
+          { "type": "text", "plain_text": " of payment, from ", "href": null, "annotations": { "bold": false, "italic": false, "strikethrough": false, "underline": false, "code": false } },
+          { "type": "text", "plain_text": "Settings", "href": null, "annotations": { "bold": false, "italic": false, "strikethrough": false, "underline": false, "code": true } },
+          { "type": "text", "plain_text": ". See the ", "href": null, "annotations": { "bold": false, "italic": false, "strikethrough": false, "underline": false, "code": false } },
+          { "type": "text", "plain_text": "help center", "href": "https://help.example.com/refunds", "annotations": { "bold": false, "italic": true, "strikethrough": false, "underline": false, "code": false } },
+          { "type": "text", "plain_text": ".", "href": null, "annotations": { "bold": false, "italic": false, "strikethrough": false, "underline": false, "code": false } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000003",
+      "type": "bulleted_list_item",
+      "has_children": true,
+      "bulleted_list_item": { "rich_text": [{ "type": "text", "plain_text": "Client side", "href": null }] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000004",
+      "type": "numbered_list_item",
+      "has_children": false,
+      "numbered_list_item": { "rich_text": [{ "type": "text", "plain_text": "Open the invoice", "href": null }] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000005",
+      "type": "numbered_list_item",
+      "has_children": false,
+      "numbered_list_item": { "rich_text": [{ "type": "text", "plain_text": "Click Refund", "href": null }] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000006",
+      "type": "to_do",
+      "has_children": false,
+      "to_do": { "rich_text": [{ "type": "text", "plain_text": "Notify the account manager", "href": null }], "checked": true }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000007",
+      "type": "callout",
+      "has_children": false,
+      "callout": { "rich_text": [{ "type": "text", "plain_text": "A refund over 500 EUR needs a manager.", "href": null }], "icon": { "type": "emoji", "emoji": "⚠️" } }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000008",
+      "type": "code",
+      "has_children": false,
+      "code": { "rich_text": [{ "type": "text", "plain_text": "curl -X POST /invoices/42/refund", "href": null }], "language": "bash", "caption": [] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000009",
+      "type": "table",
+      "has_children": true,
+      "table": { "table_width": 2, "has_column_header": true, "has_row_header": false }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000010",
+      "type": "divider",
+      "has_children": false,
+      "divider": {}
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000011",
+      "type": "image",
+      "has_children": false,
+      "image": { "type": "external", "external": { "url": "https://cdn.example.com/refund.png" }, "caption": [{ "type": "text", "plain_text": "Refund button", "href": null }] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000012",
+      "type": "image",
+      "has_children": false,
+      "image": { "type": "file", "file": { "url": "https://s3.example.com/signed?x=1", "expiry_time": "2026-10-22T12:00:00.000Z" }, "caption": [] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000013",
+      "type": "bookmark",
+      "has_children": false,
+      "bookmark": { "url": "https://status.example.com", "caption": [] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000014",
+      "type": "toggle",
+      "has_children": true,
+      "toggle": { "rich_text": [{ "type": "text", "plain_text": "Edge cases", "href": null }] }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000015",
+      "type": "child_page",
+      "has_children": true,
+      "child_page": { "title": "Partial refunds" }
+    },
+    {
+      "object": "block",
+      "id": "b0000000-0000-0000-0000-000000000016",
+      "type": "table_of_contents",
+      "has_children": false,
+      "table_of_contents": { "color": "default" }
+    }
+  ]
+}

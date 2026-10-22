@@ -1,0 +1,85 @@
+---
+import Logo from "../Logo.astro";
+import { REPO_HREF } from "../../consts";
+import { withBase } from "../../lib/paths";
+---
+
+<header class="site-header wrap">
+  <a href="#top" class="brand">
+    <Logo />
+    <span translate="no">openbrain</span>
+  </a>
+  <nav aria-label="Main" class="nav">
+    <a href="#weekly">./weekly</a>
+    <a href="#chat">./chatbot</a>
+    <a href="#config">./connectors</a>
+    <a href={withBase("/docs/")}>./docs</a>
+    <a href={REPO_HREF} class="nav-cta">Star on GitHub</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    padding-top: 22px;
+    padding-bottom: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: var(--font-mono);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .brand:hover {
+    color: var(--ink);
+  }
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    font-size: 14px;
+  }
+  .nav a {
+    color: var(--nav);
+    text-decoration: none;
+  }
+  .nav a:not(.nav-cta) {
+    padding: 10px 0;
+  }
+  .nav a:not(.nav-cta):hover {
+    color: var(--accent-ink);
+  }
+  .nav .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .nav .nav-cta:hover {
+    background: #2a2a31;
+    color: #ffffff;
+  }
+  @media (max-width: 640px) {
+    .nav {
+      gap: 4px 16px;
+      font-size: 13px;
+    }
+    .nav .nav-cta {
+      min-height: 40px;
+      padding: 0 12px;
+    }
+  }
+</style>

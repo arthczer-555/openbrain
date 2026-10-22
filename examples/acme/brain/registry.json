@@ -1,0 +1,1231 @@
+{
+  "version": 1,
+  "sections": [
+    {
+      "id": "admin",
+      "title": "Admin: Acme Console",
+      "description": "Acme Console, the back-office where Acme staff set up client companies, groups, client users, SLA policies and SSO.",
+      "rules": [
+        "A \"user\" here is a client end user (an agent of a client company), never a colleague: giving a colleague access is internal-tools/accounts.",
+        "When the question is about what can be chosen on a group, also open the company settings (parent level).",
+        "What a company can allow is itself capped by its plan: also open product/plans-and-features.",
+        "Setting up a new client: the runbook gives the order, the screen docs give the fields, sales/account-roles-and-handover gives who does what."
+      ],
+      "doc_count": 8
+    },
+    {
+      "id": "internal-tools",
+      "title": "Internal tools: Acme Hub and Acme Billing",
+      "description": "Acme Hub (pipeline, client health, reports) and Acme Billing (billing accounts, invoices, credit notes): access and daily use.",
+      "rules": [
+        "A \"user\" or an \"account\" in Acme Hub is an Acme employee using the tool, never a client.",
+        "In Acme Billing, a \"billing account\" is the billing record of a client company; a colleague with access is a \"member\".",
+        "Reports here are internal figures about Acme, never the reports clients see in Acme Desk."
+      ],
+      "doc_count": 10
+    },
+    {
+      "id": "legal-security",
+      "title": "Legal & security",
+      "description": "GDPR roles, DPAs, subprocessors, certifications, security rules for employees, security incidents, data subject requests.",
+      "rules": [
+        "For an answer given to a client, these pages are the reference; sales/security-questionnaire gives the ready-made wording.",
+        "A security incident (data or access at risk) is handled here; an outage or a broken feature is support-ops."
+      ],
+      "doc_count": 8
+    },
+    {
+      "id": "people",
+      "title": "People & HR",
+      "description": "HR policies for Acme employees, with no personal data: leave, remote work, expenses, travel, equipment, first week.",
+      "rules": [
+        "If a topic is not documented here, say so and point to people/hr-contacts. Never answer HR questions from general knowledge."
+      ],
+      "doc_count": 8
+    },
+    {
+      "id": "product",
+      "title": "Product: Acme Desk",
+      "description": "How the client-facing helpdesk app works: plans, roles, channels, SLAs, inbox, reports, login, API, data retention and export.",
+      "rules": [
+        "A \"user\" in this section is an agent or supervisor of a client working in Acme Desk, never an Acme employee.",
+        "The channels a client group can use are capped by the channels allowed for its company: also open admin/companies.",
+        "An SLA here is a target a client sets for its own customers, never the uptime commitment of Acme (support-ops/uptime-commitment)."
+      ],
+      "doc_count": 11
+    },
+    {
+      "id": "sales",
+      "title": "Sales",
+      "description": "Pricing, sales process, trials, proposals, renewals, who does what on an account, answers to security questionnaires.",
+      "rules": [
+        "A price marked to_confirm must be presented as not confirmed yet.",
+        "For data retention or security answers given to a client, product/data-retention is the reference page.",
+        "An \"account plan\" is a sales document about a client; a \"plan\" alone is an Acme Desk subscription plan."
+      ],
+      "doc_count": 9
+    },
+    {
+      "id": "support-ops",
+      "title": "Support operations",
+      "description": "How Acme's own support team works: levels, escalation, on-call, incidents, uptime commitment, refunds and credits.",
+      "rules": [
+        "These pages describe the support Acme gives its clients, not the helpdesk features of Acme Desk.",
+        "Support hours, response targets and the uptime commitment here are Acme's own, never the settings of a client group."
+      ],
+      "doc_count": 8
+    }
+  ],
+  "docs": [
+    {
+      "id": "admin/client-offboarding",
+      "title": "Client offboarding",
+      "section": "admin",
+      "when_to_open": "A client is leaving: the steps from its cancellation to closing its company, data export and final billing, and what happens to its tickets.",
+      "aliases": [
+        "offboarding",
+        "client leaving",
+        "close a client",
+        "départ d'un client",
+        "offboarding client",
+        "fin de contrat client"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Client-offboarding-e0f4e0298473db441803fb4da66350ac",
+      "updated_at": "2026-10-06T11:15:00.000Z"
+    },
+    {
+      "id": "admin/client-onboarding-runbook",
+      "title": "Client onboarding runbook",
+      "section": "admin",
+      "when_to_open": "Set up a newly signed client from start to finish, in the right order, before its launch meeting.",
+      "aliases": [
+        "onboard a new client",
+        "setup a client",
+        "client setup",
+        "onboarding client",
+        "mise en place client",
+        "onboarding d'un nouveau client"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Client-onboarding-runbook-797fdea10f19d670943b8715eb8c0f04",
+      "updated_at": "2026-10-16T08:10:00.000Z"
+    },
+    {
+      "id": "admin/companies",
+      "title": "Companies: create and manage",
+      "section": "admin",
+      "when_to_open": "Create or edit a client company in Acme Console, the first step when setting up a new client: plan, agent seats, allowed channels, holidays, company admins; apply an upgrade or downgrade; close it.",
+      "aliases": [
+        "create a company",
+        "new client company",
+        "allowed channels",
+        "company settings",
+        "agent seats",
+        "créer une entreprise",
+        "canaux autorisés",
+        "paramètres de l'entreprise"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Companies-create-and-manage-8b28a8494a558ea3b69be61943e4281c",
+      "updated_at": "2026-10-14T15:20:00.000Z"
+    },
+    {
+      "id": "admin/groups",
+      "title": "Groups: create and configure",
+      "section": "admin",
+      "when_to_open": "Create a group of client users and choose its channels, business hours and SLA policy; why an option is not available on a group.",
+      "aliases": [
+        "create a group",
+        "group settings",
+        "team",
+        "créer un groupe",
+        "équipe"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Groups-create-and-configure-50b5c15954c3cc233787dac785a8a0e1",
+      "updated_at": "2026-10-14T15:31:00.000Z"
+    },
+    {
+      "id": "admin/sla-policies",
+      "title": "Set up SLA policies and business hours",
+      "section": "admin",
+      "when_to_open": "Create the SLA policies of a client company in Acme Console, apply one to a group and set its business hours; why another SLA policy cannot be added.",
+      "aliases": [
+        "configure an SLA",
+        "new SLA policy",
+        "SLA setup",
+        "group business hours",
+        "configurer un SLA",
+        "politique SLA",
+        "horaires d'un groupe"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Set-up-SLA-policies-and-business-hours-1f8e595fd14c50ae832cf46fb4c2f263",
+      "updated_at": "2026-10-14T16:02:00.000Z"
+    },
+    {
+      "id": "admin/sso-setup",
+      "title": "Single sign-on (SSO) for a client company",
+      "section": "admin",
+      "when_to_open": "Set up or troubleshoot single sign-on (SAML) for a client company on the Enterprise plan, and enforce it for its users.",
+      "aliases": [
+        "SSO",
+        "single sign-on",
+        "SAML",
+        "identity provider",
+        "enforce SSO",
+        "authentification unique",
+        "connexion SSO"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Single-sign-on-SSO-for-a-client-company-bba9a311f183fbac90e6a5610b1224a3",
+      "updated_at": "2026-09-29T13:40:00.000Z"
+    },
+    {
+      "id": "admin/support-access",
+      "title": "Open a client workspace as support",
+      "section": "admin",
+      "when_to_open": "Look at the Acme Desk workspace of a client as Acme support: how the client grants access, how staff open it, rules during the session.",
+      "aliases": [
+        "support access",
+        "open as support",
+        "view a client workspace",
+        "impersonate",
+        "accès support",
+        "voir l'espace d'un client"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Open-a-client-workspace-as-support-213404dd7b5b4c6965c4b26eb78b414e",
+      "updated_at": "2026-09-18T09:25:00.000Z"
+    },
+    {
+      "id": "admin/users",
+      "title": "Client users: create, invite and import",
+      "section": "admin",
+      "when_to_open": "Create, invite, import or deactivate client end users (agents and supervisors of a client company) in Acme Console. Not for giving a colleague access to Acme Hub.",
+      "aliases": [
+        "add a user",
+        "create user",
+        "invite user",
+        "import users CSV",
+        "ajouter un utilisateur client"
+      ],
+      "warnings": [
+        "A user here is a client end user. To give a colleague access to the internal tool, open internal-tools/accounts."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Client-users-create-invite-and-import-0ebc1b5d75e26e738cd588a096d5fa5f",
+      "updated_at": "2026-10-13T10:05:00.000Z"
+    },
+    {
+      "id": "internal-tools/accounts",
+      "title": "Acme Hub accounts: give a colleague access",
+      "section": "internal-tools",
+      "when_to_open": "Give a colleague access to Acme Hub, the internal tool: create, change the role of or deactivate an employee account.",
+      "aliases": [
+        "add a user in the internal tool",
+        "new employee access",
+        "colleague account",
+        "ajouter un utilisateur dans l'outil interne",
+        "donner accès à un collègue"
+      ],
+      "warnings": [
+        "These are Acme Hub accounts only: access to Acme Billing is internal-tools/billing-overview."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Acme-Hub-accounts-give-a-colleague-access-0be3250b872e5be3c22165f4e4d34c4b",
+      "updated_at": "2026-10-10T14:00:00.000Z"
+    },
+    {
+      "id": "internal-tools/billing-accounts",
+      "title": "Billing accounts in Acme Billing",
+      "section": "internal-tools",
+      "when_to_open": "Create or edit the billing account of a client company in Acme Billing: legal entity, VAT, billing contact, cycle, payment method, status.",
+      "aliases": [
+        "billing account",
+        "new billing account",
+        "VAT number",
+        "billing contact",
+        "payment method",
+        "compte de facturation",
+        "contact de facturation"
+      ],
+      "warnings": [
+        "A billing account is the billing record of a client company, not the login of a colleague: access to Acme Billing is internal-tools/billing-overview."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Billing-accounts-in-Acme-Billing-8d05182651f8af06eed8f7991b0b9ca3",
+      "updated_at": "2026-10-07T13:05:00.000Z"
+    },
+    {
+      "id": "internal-tools/billing-credit-notes",
+      "title": "Credit notes in Acme Billing",
+      "section": "internal-tools",
+      "when_to_open": "Issue a credit note in Acme Billing (service credit, billing error, commercial gesture), get it approved, and how the client gets the money.",
+      "aliases": [
+        "credit note",
+        "issue a credit",
+        "cancel an invoice",
+        "avoir",
+        "créer un avoir"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Credit-notes-in-Acme-Billing-932ca86336270a7e2c08b1983bf0d9ca",
+      "updated_at": "2026-10-09T15:40:00.000Z"
+    },
+    {
+      "id": "internal-tools/billing-invoices",
+      "title": "Invoices in Acme Billing",
+      "section": "internal-tools",
+      "when_to_open": "When invoices are issued, payment terms, reminders for overdue invoices, sending an invoice again or correcting a wrong one in Acme Billing.",
+      "aliases": [
+        "invoice",
+        "resend invoice",
+        "overdue invoice",
+        "payment terms",
+        "unpaid",
+        "facture",
+        "relance",
+        "impayé"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Invoices-in-Acme-Billing-b5cb3cc96d3291283d6dc6e799f47a0d",
+      "updated_at": "2026-09-15T11:20:00.000Z"
+    },
+    {
+      "id": "internal-tools/billing-overview",
+      "title": "Acme Billing overview and access",
+      "section": "internal-tools",
+      "when_to_open": "What Acme Billing is and its roles; give a colleague access to Acme Billing, change their role or remove the access.",
+      "aliases": [
+        "Acme Billing",
+        "billing tool",
+        "Acme Billing access",
+        "invite member",
+        "finance tool",
+        "outil de facturation",
+        "accès à Acme Billing"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Acme-Billing-overview-and-access-4d7887b8952db75795593ded974de30f",
+      "updated_at": "2026-10-12T08:50:00.000Z"
+    },
+    {
+      "id": "internal-tools/billing-plan-changes",
+      "title": "Plan and seat changes",
+      "section": "internal-tools",
+      "when_to_open": "Upgrade, downgrade or change the seats of a client: who agrees, what to change in Acme Billing and Acme Console, when it takes effect.",
+      "aliases": [
+        "upgrade",
+        "downgrade",
+        "change plan",
+        "add seats",
+        "plan change",
+        "changement de plan",
+        "montée en gamme",
+        "ajouter des sièges"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Plan-and-seat-changes-7f08248fd5968bc7859ff677a802803f",
+      "updated_at": "2026-10-12T09:00:00.000Z"
+    },
+    {
+      "id": "internal-tools/hub-client-health",
+      "title": "Client health in Acme Hub",
+      "section": "internal-tools",
+      "when_to_open": "Read the client health score in Acme Hub, the signals behind it, and what customer success does when a client turns red.",
+      "aliases": [
+        "client health",
+        "health score",
+        "red client",
+        "churn risk",
+        "santé client",
+        "score de santé",
+        "client à risque"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Client-health-in-Acme-Hub-11291e35a2dc56fc9b3cddbf436d9ba8",
+      "updated_at": "2026-10-01T16:45:00.000Z"
+    },
+    {
+      "id": "internal-tools/hub-overview",
+      "title": "Acme Hub overview",
+      "section": "internal-tools",
+      "when_to_open": "What Acme Hub is, which modules it has (pipeline, client health, reports) and how employees log in.",
+      "aliases": [
+        "Acme Hub",
+        "internal tool",
+        "outil interne",
+        "log in to the hub",
+        "connexion"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Acme-Hub-overview-225be2ba26d975f680250479b1149628",
+      "updated_at": "2026-10-10T14:12:00.000Z"
+    },
+    {
+      "id": "internal-tools/hub-pipeline",
+      "title": "Acme Hub pipeline: track deals",
+      "section": "internal-tools",
+      "when_to_open": "Create or update a deal in the Acme Hub pipeline: fields, stages, weekly review, what happens when a deal is won or lost.",
+      "aliases": [
+        "pipeline",
+        "deal",
+        "new deal",
+        "opportunity",
+        "next step",
+        "pipe commercial",
+        "opportunité"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Acme-Hub-pipeline-track-deals-ae8c232561fbcafb7f88457f5f1da49f",
+      "updated_at": "2026-09-22T10:30:00.000Z"
+    },
+    {
+      "id": "internal-tools/hub-reports",
+      "title": "Weekly reports in Acme Hub",
+      "section": "internal-tools",
+      "when_to_open": "The weekly internal report of Acme Hub: when it is sent, what it covers, who can see the Reports module, exports.",
+      "aliases": [
+        "weekly report",
+        "leadership report",
+        "Hub reports",
+        "internal reports",
+        "rapport hebdomadaire",
+        "reporting interne"
+      ],
+      "warnings": [
+        "These are internal figures about the business of Acme; the reports clients see in Acme Desk are product/reports."
+      ],
+      "status": "stale",
+      "url": "https://www.notion.so/acme/Weekly-reports-in-Acme-Hub-c430f4ab82bb3a505bd9bd917372c0ac",
+      "updated_at": "2026-08-24T09:15:00.000Z"
+    },
+    {
+      "id": "legal-security/ai-tools-policy",
+      "title": "Using AI tools at work (draft)",
+      "section": "legal-security",
+      "when_to_open": "Whether and how employees may use AI tools at work, and what must never be pasted into them.",
+      "aliases": [
+        "AI policy",
+        "AI chatbot",
+        "generative AI",
+        "AI assistant",
+        "IA",
+        "intelligence artificielle",
+        "politique IA"
+      ],
+      "warnings": [],
+      "status": "to_confirm",
+      "url": "https://www.notion.so/acme/Using-AI-tools-at-work-draft-37f90ac31486af80ec34ed5e1b53c1ed",
+      "updated_at": "2026-10-20T08:45:00.000Z"
+    },
+    {
+      "id": "legal-security/certifications",
+      "title": "Certifications and audits",
+      "section": "legal-security",
+      "when_to_open": "Whether Acme holds a security certification (ISO), penetration tests, audit requests from clients.",
+      "aliases": [
+        "ISO 27001",
+        "certification",
+        "certified",
+        "penetration test",
+        "pentest",
+        "audit",
+        "certifié"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Certifications-and-audits-f315562ad9423823bad620c732a3ca9d",
+      "updated_at": "2026-10-02T09:50:00.000Z"
+    },
+    {
+      "id": "legal-security/data-subject-requests",
+      "title": "Data subject requests",
+      "section": "legal-security",
+      "when_to_open": "A person asks to access, correct or delete their personal data, whether a customer of a client or someone whose data Acme controls.",
+      "aliases": [
+        "data subject request",
+        "right to be forgotten",
+        "delete personal data",
+        "access request",
+        "demande RGPD",
+        "droit à l'oubli"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Data-subject-requests-13120f2c40e0b457745fecec43cc88d0",
+      "updated_at": "2026-09-11T11:15:00.000Z"
+    },
+    {
+      "id": "legal-security/dpa-process",
+      "title": "Data processing agreement (DPA) process",
+      "section": "legal-security",
+      "when_to_open": "Sign a data processing agreement with a client: the standard DPA, a DPA sent by the client, where signed DPAs are kept.",
+      "aliases": [
+        "DPA",
+        "data processing agreement",
+        "client DPA",
+        "accord de traitement des données"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Data-processing-agreement-DPA-process-ed57363fdb60dc54f99563db8dfeace5",
+      "updated_at": "2026-09-11T10:40:00.000Z"
+    },
+    {
+      "id": "legal-security/gdpr-overview",
+      "title": "GDPR at Acme: roles and principles",
+      "section": "legal-security",
+      "when_to_open": "The role of Acme under GDPR (processor or controller) for each kind of data, the principles applied, who answers privacy questions.",
+      "aliases": [
+        "GDPR",
+        "processor",
+        "controller",
+        "privacy",
+        "RGPD",
+        "sous-traitant",
+        "responsable de traitement"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/GDPR-at-Acme-roles-and-principles-557481454a2cdc21eeeb2f4bac1cf826",
+      "updated_at": "2026-09-11T10:00:00.000Z"
+    },
+    {
+      "id": "legal-security/security-incidents",
+      "title": "Security incidents and data breaches",
+      "section": "legal-security",
+      "when_to_open": "Something may have exposed data or access (lost laptop, phishing, data sent to the wrong person, breach): how to report it and what happens next.",
+      "aliases": [
+        "security incident",
+        "data breach",
+        "data leak",
+        "phishing",
+        "incident de sécurité",
+        "fuite de données",
+        "violation de données"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Security-incidents-and-data-breaches-61c60d791f75cb68f26d399e67774317",
+      "updated_at": "2026-09-26T13:50:00.000Z"
+    },
+    {
+      "id": "legal-security/security-policy",
+      "title": "Information security policy for employees",
+      "section": "legal-security",
+      "when_to_open": "Security rules every employee follows: two-factor authentication, passwords, devices, client data, training.",
+      "aliases": [
+        "security policy",
+        "password manager",
+        "lock screen",
+        "politique de sécurité",
+        "sécurité informatique"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Information-security-policy-for-employees-c3a72983c539b8e3ae7094451889e49a",
+      "updated_at": "2026-09-26T13:20:00.000Z"
+    },
+    {
+      "id": "legal-security/subprocessors",
+      "title": "Subprocessors",
+      "section": "legal-security",
+      "when_to_open": "Which subprocessors handle client data and where the data is, how clients get the list and are told about a new one.",
+      "aliases": [
+        "subprocessors",
+        "sub-processors",
+        "subprocessor list",
+        "sous-traitants ultérieurs",
+        "liste des sous-traitants"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Subprocessors-d96f295fe818f346598fb794073c7d08",
+      "updated_at": "2026-10-02T09:30:00.000Z"
+    },
+    {
+      "id": "people/annual-leave",
+      "title": "Annual leave and public holidays",
+      "section": "people",
+      "when_to_open": "How many days of paid leave employees get, how to request leave, carry-over of unused days, public holidays.",
+      "aliases": [
+        "annual leave",
+        "paid leave",
+        "holiday request",
+        "time off",
+        "vacation",
+        "congés payés",
+        "jours de congés",
+        "poser des congés"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Annual-leave-and-public-holidays-8c72874aa209d5f2578d8b1642914efe",
+      "updated_at": "2026-09-08T10:20:00.000Z"
+    },
+    {
+      "id": "people/business-travel",
+      "title": "Business travel",
+      "section": "people",
+      "when_to_open": "Book a work trip: approval, train or plane, hotel limits, visiting a client.",
+      "aliases": [
+        "business trip",
+        "travel policy",
+        "hotel",
+        "train",
+        "flight",
+        "déplacement professionnel",
+        "voyage d'affaires"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Business-travel-52f7a0499ec392266fb2277ba4eca1bc",
+      "updated_at": "2026-09-24T14:35:00.000Z"
+    },
+    {
+      "id": "people/equipment",
+      "title": "Laptop and equipment",
+      "section": "people",
+      "when_to_open": "Laptop and accessories for employees: what is provided, renewal, a lost or stolen laptop, returning equipment.",
+      "aliases": [
+        "laptop",
+        "computer",
+        "screen",
+        "lost laptop",
+        "equipment",
+        "ordinateur",
+        "matériel informatique"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Laptop-and-equipment-189c601961bcf7feddd1aa830c607c4d",
+      "updated_at": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "id": "people/expenses",
+      "title": "Expense policy",
+      "section": "people",
+      "when_to_open": "What an employee can claim as an expense, the limits, how and when to submit a claim and get reimbursed.",
+      "aliases": [
+        "expense claim",
+        "reimbursement",
+        "receipt",
+        "expense report",
+        "note de frais",
+        "frais professionnels"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Expense-policy-a7b553ccd4709e17f5c53a8f7b0b7a41",
+      "updated_at": "2026-09-24T14:10:00.000Z"
+    },
+    {
+      "id": "people/first-week",
+      "title": "Your first week at Acme",
+      "section": "people",
+      "when_to_open": "Checklist for the first days of a new employee: laptop, accounts, access to tools, onboarding buddy, mandatory training.",
+      "aliases": [
+        "new employee",
+        "first day",
+        "new joiner",
+        "employee onboarding",
+        "nouvel arrivant",
+        "premier jour"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Your-first-week-at-Acme-ef04fb9f85e72bdd07ac63475b798d9c",
+      "updated_at": "2026-10-05T08:30:00.000Z"
+    },
+    {
+      "id": "people/hr-contacts",
+      "title": "HR contacts: who to ask",
+      "section": "people",
+      "when_to_open": "Who to contact for an HR question that is not documented: payroll, leave, contracts, wellbeing.",
+      "aliases": [
+        "HR contact",
+        "who to ask",
+        "ressources humaines",
+        "à qui demander",
+        "payroll question"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/HR-contacts-who-to-ask-5122a8c82768b82abc196a144197915f",
+      "updated_at": "2026-09-28T10:00:00.000Z"
+    },
+    {
+      "id": "people/remote-work",
+      "title": "Remote work policy",
+      "section": "people",
+      "when_to_open": "The remote work rule for employees, who approves exceptions and what to do when working from abroad.",
+      "aliases": [
+        "work from home",
+        "remote",
+        "télétravail",
+        "politique de télétravail",
+        "travail à distance"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Remote-work-policy-e53a2655e42e352a654b3668b196a53d",
+      "updated_at": "2026-09-03T09:00:00.000Z"
+    },
+    {
+      "id": "people/sick-leave",
+      "title": "Sick leave: what to do",
+      "section": "people",
+      "when_to_open": "An employee is ill: who to tell, how to record the absence, when a medical certificate is needed, coming back to work.",
+      "aliases": [
+        "sick leave",
+        "illness",
+        "medical certificate",
+        "arrêt maladie",
+        "malade",
+        "certificat médical"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Sick-leave-what-to-do-d2d0da85cf7ca230c735332ddc7a4599",
+      "updated_at": "2026-09-08T10:45:00.000Z"
+    },
+    {
+      "id": "product/api-and-webhooks",
+      "title": "API and webhooks",
+      "section": "product",
+      "when_to_open": "Connect the tools of a client to Acme Desk: API keys, request limits, webhooks, developer documentation.",
+      "aliases": [
+        "API",
+        "API key",
+        "webhook",
+        "rate limit",
+        "integration",
+        "clé API",
+        "intégration"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/API-and-webhooks-040cc36937b42dd39afb69f67a324fbf",
+      "updated_at": "2026-09-02T11:30:00.000Z"
+    },
+    {
+      "id": "product/data-export",
+      "title": "Data export",
+      "section": "product",
+      "when_to_open": "A client wants its tickets out of Acme Desk: self-service CSV export, full export with attachments, what is not exported.",
+      "aliases": [
+        "export",
+        "export tickets",
+        "CSV export",
+        "full export",
+        "exporter les données",
+        "export des tickets"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Data-export-20530c214bdb88f8b563cb236f2e9014",
+      "updated_at": "2026-10-06T11:40:00.000Z"
+    },
+    {
+      "id": "product/data-retention",
+      "title": "Data retention in Acme Desk",
+      "section": "product",
+      "when_to_open": "How long tickets, attachments and call transcripts are kept and when they are deleted, as implemented in the product.",
+      "aliases": [
+        "retention",
+        "data deletion",
+        "durée de conservation",
+        "suppression des données",
+        "GDPR retention"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Data-retention-in-Acme-Desk-916af458454bc8e3fc7fe583aa63bb72",
+      "updated_at": "2026-10-06T11:45:00.000Z"
+    },
+    {
+      "id": "product/login-and-security",
+      "title": "Logging in to Acme Desk",
+      "section": "product",
+      "when_to_open": "How client users log in to Acme Desk: passwords, reset, two-factor authentication, SSO, sessions, blocked logins.",
+      "aliases": [
+        "login",
+        "password",
+        "reset password",
+        "two-factor authentication",
+        "2FA",
+        "mot de passe",
+        "double authentification"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Logging-in-to-Acme-Desk-29699e19fb56b3ceb979b288a4433746",
+      "updated_at": "2026-09-29T14:05:00.000Z"
+    },
+    {
+      "id": "product/macros-and-automations",
+      "title": "Macros, tags and automation rules",
+      "section": "product",
+      "when_to_open": "Saved replies (macros), tags, automation rules and automatic assignment of tickets in Acme Desk.",
+      "aliases": [
+        "macro",
+        "saved reply",
+        "tags",
+        "automation rule",
+        "round robin",
+        "réponse enregistrée",
+        "règle d'automatisation"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Macros-tags-and-automation-rules-12be4d6e84e3d12381d5c6d63f5819e0",
+      "updated_at": "2026-09-17T10:10:00.000Z"
+    },
+    {
+      "id": "product/overview-and-roles",
+      "title": "Acme Desk overview and roles",
+      "section": "product",
+      "when_to_open": "What Acme Desk is, which roles exist for a client (agent, supervisor, admin) and what each role can see or do.",
+      "aliases": [
+        "roles",
+        "permissions",
+        "supervisor",
+        "agent",
+        "rôles",
+        "droits"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Acme-Desk-overview-and-roles-ca4196b5df0a7346f8a0facb8e5aa3f5",
+      "updated_at": "2026-10-15T08:40:00.000Z"
+    },
+    {
+      "id": "product/plans-and-features",
+      "title": "Plans and features",
+      "section": "product",
+      "when_to_open": "Which plan a client needs for a feature (channels, SLA policies, reports, API, single sign-on) and what the plan caps for a company and its groups.",
+      "aliases": [
+        "features per plan",
+        "plan comparison",
+        "which plan",
+        "Starter",
+        "Growth",
+        "Enterprise",
+        "fonctionnalités par plan",
+        "comparatif des offres"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Plans-and-features-95864e3247dc2c69270cfddccdb7e2ca",
+      "updated_at": "2026-10-15T08:30:00.000Z"
+    },
+    {
+      "id": "product/reports",
+      "title": "Reports in Acme Desk",
+      "section": "product",
+      "when_to_open": "The reports clients see in Acme Desk: which ones exist, on which plans, who sees what, exports.",
+      "aliases": [
+        "Acme Desk reports",
+        "client reports",
+        "SLA compliance report",
+        "statistiques",
+        "rapports Acme Desk"
+      ],
+      "warnings": [
+        "These are the reports clients see in Acme Desk; the internal weekly figures of Acme are internal-tools/hub-reports."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Reports-in-Acme-Desk-47e5c184a75f413b9712b2cdf504c699",
+      "updated_at": "2026-09-21T15:00:00.000Z"
+    },
+    {
+      "id": "product/sla-and-business-hours",
+      "title": "SLA policies and business hours",
+      "section": "product",
+      "when_to_open": "How response and resolution targets are computed, how business hours, holidays and pending tickets pause the clock.",
+      "aliases": [
+        "SLA",
+        "response time",
+        "business hours",
+        "délai de réponse",
+        "heures ouvrées"
+      ],
+      "warnings": [
+        "These SLA policies are targets clients set for their own customers. The availability commitment of Acme to its clients is support-ops/uptime-commitment."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/SLA-policies-and-business-hours-f1048e01fe595fd9c4bb1ea9a8fccc23",
+      "updated_at": "2026-10-14T16:10:00.000Z"
+    },
+    {
+      "id": "product/ticket-channels",
+      "title": "Ticket channels",
+      "section": "product",
+      "when_to_open": "Which channels a ticket can come from (email, chat, phone) and why a channel is missing for a group.",
+      "aliases": [
+        "email channel",
+        "live chat",
+        "phone channel",
+        "canal",
+        "canaux",
+        "channel missing"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Ticket-channels-ba83fd42f66ca2d2ff704b6eaa4ff41c",
+      "updated_at": "2026-10-14T16:20:00.000Z"
+    },
+    {
+      "id": "product/ticket-statuses",
+      "title": "Inbox and ticket statuses",
+      "section": "product",
+      "when_to_open": "Inbox views and ticket statuses in Acme Desk, when a solved ticket closes automatically, what a reply to a closed ticket does.",
+      "aliases": [
+        "ticket status",
+        "inbox",
+        "pending",
+        "solved",
+        "reopen a ticket",
+        "statut du ticket",
+        "boîte de réception"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Inbox-and-ticket-statuses-832e1055cdc4ca3c6d62945d3da276e7",
+      "updated_at": "2026-09-10T13:00:00.000Z"
+    },
+    {
+      "id": "sales/account-plans",
+      "title": "Account plans for strategic clients",
+      "section": "sales",
+      "when_to_open": "Write or review the account plan of a strategic client: which clients need one, what it contains, who writes it and when.",
+      "aliases": [
+        "account plan",
+        "strategic account",
+        "key account",
+        "plan de compte",
+        "compte stratégique"
+      ],
+      "warnings": [
+        "An account plan is a sales document about a client, not an Acme Desk subscription plan (product/plans-and-features)."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Account-plans-for-strategic-clients-402c8bebe90b6a086df13c072b5d70e7",
+      "updated_at": "2026-09-25T11:00:00.000Z"
+    },
+    {
+      "id": "sales/account-roles-and-handover",
+      "title": "Account roles and handover",
+      "section": "sales",
+      "when_to_open": "Who does what on a client account (account executive, customer success manager, support, finance) and how a newly signed client is handed over.",
+      "aliases": [
+        "who does what",
+        "handover",
+        "account executive",
+        "customer success",
+        "qui fait quoi",
+        "passation"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Account-roles-and-handover-9a5cabb43332eab993dcab788fdfe132",
+      "updated_at": "2026-10-13T09:30:00.000Z"
+    },
+    {
+      "id": "sales/demo-workspace",
+      "title": "Demo workspace",
+      "section": "sales",
+      "when_to_open": "Show Acme Desk to a prospect: the demo workspace, getting access to it, good practice during a demo.",
+      "aliases": [
+        "demo",
+        "Acme Demo",
+        "demo account",
+        "sandbox",
+        "démo",
+        "environnement de démo"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Demo-workspace-3aca372dc210029168211bae53dfff34",
+      "updated_at": "2026-09-04T15:15:00.000Z"
+    },
+    {
+      "id": "sales/free-trial",
+      "title": "Free trial",
+      "section": "sales",
+      "when_to_open": "Offer, start, extend or convert a free trial of Acme Desk for a prospect.",
+      "aliases": [
+        "free trial",
+        "trial",
+        "extend a trial",
+        "essai gratuit",
+        "période d'essai"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Free-trial-fb7e90d27a0ca4ed6ec620383f05a3ca",
+      "updated_at": "2026-09-16T16:30:00.000Z"
+    },
+    {
+      "id": "sales/pricing",
+      "title": "Pricing",
+      "section": "sales",
+      "when_to_open": "What we charge for each Acme Desk plan, per agent seat, and what is included in each plan.",
+      "aliases": [
+        "price",
+        "prix",
+        "tarif",
+        "cost per seat",
+        "plans",
+        "prix par siège",
+        "combien ça coûte"
+      ],
+      "warnings": [
+        "The Enterprise price is not confirmed yet: always present it as to be confirmed."
+      ],
+      "status": "to_confirm",
+      "url": "https://www.notion.so/acme/Pricing-5b9b8316a72af7478dc15509cf31d547",
+      "updated_at": "2026-10-15T09:45:00.000Z"
+    },
+    {
+      "id": "sales/proposals-and-order-forms",
+      "title": "Proposals and order forms",
+      "section": "sales",
+      "when_to_open": "Write a proposal, get an order form signed, handle non-standard terms, or an amendment when the plan or seats change during an annual contract.",
+      "aliases": [
+        "proposal",
+        "order form",
+        "contract",
+        "amendment",
+        "e-signature",
+        "proposition commerciale",
+        "bon de commande",
+        "avenant"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Proposals-and-order-forms-89195de7b4fcef9e34a763e840aa96e5",
+      "updated_at": "2026-10-08T10:50:00.000Z"
+    },
+    {
+      "id": "sales/renewals-and-cancellations",
+      "title": "Renewals and cancellations",
+      "section": "sales",
+      "when_to_open": "Renewal of annual and monthly contracts, notice periods, price changes at renewal, what to do when a client cancels.",
+      "aliases": [
+        "renewal",
+        "cancellation",
+        "notice period",
+        "cancel a contract",
+        "renouvellement",
+        "résiliation",
+        "préavis"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Renewals-and-cancellations-a33c0796df3125ed1eff7193d00e5df4",
+      "updated_at": "2026-10-06T10:30:00.000Z"
+    },
+    {
+      "id": "sales/sales-process",
+      "title": "Sales process and deal stages",
+      "section": "sales",
+      "when_to_open": "The stages of a deal from qualification to closed won or lost, what moves a deal forward, the weekly pipeline review.",
+      "aliases": [
+        "sales process",
+        "deal stages",
+        "pipeline stages",
+        "closed won",
+        "processus de vente",
+        "étapes de vente"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Sales-process-and-deal-stages-27d39bf939d76a42b01014635a7450a5",
+      "updated_at": "2026-09-14T09:10:00.000Z"
+    },
+    {
+      "id": "sales/security-questionnaire",
+      "title": "Answers to client security questionnaires",
+      "section": "sales",
+      "when_to_open": "Answer a client security or GDPR questionnaire: hosting, encryption, authentication, retention, certifications, sub-processors.",
+      "aliases": [
+        "security questionnaire",
+        "GDPR questionnaire",
+        "questionnaire sécurité",
+        "hosting",
+        "hébergement"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Answers-to-client-security-questionnaires-225de46cfd2560d2749197139403e1e5",
+      "updated_at": "2026-10-02T10:00:00.000Z"
+    },
+    {
+      "id": "support-ops/bug-reports-and-feature-requests",
+      "title": "Bug reports and feature requests",
+      "section": "support-ops",
+      "when_to_open": "Report a bug to engineering or log a feature request from a client, and what to tell the client.",
+      "aliases": [
+        "bug",
+        "bug report",
+        "feature request",
+        "engineering tracker",
+        "signaler un bug",
+        "demande de fonctionnalité"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Bug-reports-and-feature-requests-23b7b5e29c46a8046a4b3735eb933257",
+      "updated_at": "2026-09-30T16:00:00.000Z"
+    },
+    {
+      "id": "support-ops/incident-communication",
+      "title": "Incident communication",
+      "section": "support-ops",
+      "when_to_open": "Inform clients during an outage or a broken feature: status page, emails, update frequency, post-mortem.",
+      "aliases": [
+        "status page",
+        "outage",
+        "incident update",
+        "post-mortem",
+        "panne",
+        "communication d'incident"
+      ],
+      "warnings": [
+        "Service incidents only (outage, broken feature). A suspected data breach follows legal-security/security-incidents."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Incident-communication-3d9f909597fbc315322bead3e4f6096f",
+      "updated_at": "2026-10-19T08:20:00.000Z"
+    },
+    {
+      "id": "support-ops/incident-severity",
+      "title": "Incident severity levels",
+      "section": "support-ops",
+      "when_to_open": "Choose the severity of a service incident on Acme Desk, and what each severity means for paging and client updates.",
+      "aliases": [
+        "severity",
+        "P1",
+        "P2",
+        "critical incident",
+        "sévérité",
+        "priorité d'incident"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Incident-severity-levels-c3e1a239a80ff7b241e79bd9c53a3a2a",
+      "updated_at": "2026-09-09T11:00:00.000Z"
+    },
+    {
+      "id": "support-ops/on-call",
+      "title": "Engineering on-call",
+      "section": "support-ops",
+      "when_to_open": "The engineering on-call rota: when the on-call engineer is paged, how fast they respond, who can page.",
+      "aliases": [
+        "on-call",
+        "astreinte",
+        "pager",
+        "rota",
+        "paging"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Engineering-on-call-389ded1b2165d672184d768700577bf3",
+      "updated_at": "2026-09-09T10:30:00.000Z"
+    },
+    {
+      "id": "support-ops/refunds-and-credits",
+      "title": "Refunds and service credits",
+      "section": "support-ops",
+      "when_to_open": "When a client gets a service credit, a commercial gesture or a refund, how much, and who approves it.",
+      "aliases": [
+        "refund",
+        "service credit",
+        "commercial gesture",
+        "money back",
+        "remboursement client",
+        "geste commercial"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Refunds-and-service-credits-9bc5d415d37c7a36cf214aa9223e45bc",
+      "updated_at": "2026-10-09T15:20:00.000Z"
+    },
+    {
+      "id": "support-ops/support-hours",
+      "title": "Acme support hours and response targets",
+      "section": "support-ops",
+      "when_to_open": "When the support team of Acme answers clients, on which channels, and its first response targets per plan.",
+      "aliases": [
+        "support hours",
+        "opening hours of support",
+        "support phone line",
+        "horaires du support",
+        "délai de réponse du support"
+      ],
+      "warnings": [
+        "These are the hours of Acme support, not the business hours a client sets for its groups (admin/sla-policies)."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Acme-support-hours-and-response-targets-07abece106d9ad6f7f888e034e1d83ac",
+      "updated_at": "2026-09-19T14:30:00.000Z"
+    },
+    {
+      "id": "support-ops/support-levels-and-escalation",
+      "title": "Support levels and escalation",
+      "section": "support-ops",
+      "when_to_open": "How the support team of Acme is organised in levels, when to escalate a client request, who stays the contact of the client.",
+      "aliases": [
+        "escalation",
+        "escalate",
+        "level 1",
+        "level 2",
+        "product specialists",
+        "escalade",
+        "niveau de support"
+      ],
+      "warnings": [],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Support-levels-and-escalation-917c98e290e47796fb8426a6d9a20124",
+      "updated_at": "2026-09-09T10:00:00.000Z"
+    },
+    {
+      "id": "support-ops/uptime-commitment",
+      "title": "Uptime commitment to clients",
+      "section": "support-ops",
+      "when_to_open": "The availability commitment of Acme to its clients per plan, how it is measured, planned maintenance.",
+      "aliases": [
+        "uptime",
+        "availability",
+        "uptime SLA",
+        "maintenance window",
+        "disponibilité",
+        "engagement de disponibilité"
+      ],
+      "warnings": [
+        "SLA here means the availability commitment of Acme to its clients, not the SLA policies a client sets in Acme Desk (product/sla-and-business-hours)."
+      ],
+      "status": "validated",
+      "url": "https://www.notion.so/acme/Uptime-commitment-to-clients-581159b36705afffcf2c6630ec44bb97",
+      "updated_at": "2026-09-19T14:00:00.000Z"
+    }
+  ]
+}

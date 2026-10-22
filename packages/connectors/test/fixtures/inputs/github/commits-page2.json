@@ -1,0 +1,24 @@
+[
+  {
+    "sha": "b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "html_url": "https://github.com/acme/app/commit/b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "commit": {
+      "message": "Bump the npm group with 3 updates",
+      "author": { "name": "dependabot[bot]", "date": "2026-10-18T05:00:00Z" },
+      "committer": { "name": "GitHub", "date": "2026-10-18T05:00:00Z" }
+    },
+    "author": { "login": "dependabot[bot]", "type": "Bot" },
+    "parents": [{ "sha": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1" }]
+  },
+  {
+    "sha": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "html_url": "https://github.com/acme/app/commit/c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "commit": {
+      "message": "Document the SSO setup",
+      "author": { "name": "Dev C", "date": "2026-10-16T10:00:00Z" },
+      "committer": { "name": "Dev C", "date": "2026-10-16T10:00:00Z" }
+    },
+    "author": { "login": "dev-c", "type": "User" },
+    "parents": [{ "sha": "a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0" }]
+  }
+]

@@ -1,0 +1,130 @@
+---
+import { REPO_URL_TEXT } from "../../consts";
+import { withBase } from "../../lib/paths";
+
+const commands = [`git clone ${REPO_URL_TEXT} my-brain`, "cd my-brain && npm install", "npm run openbrain -- demo"];
+---
+
+<section id="start" aria-labelledby="start-title" class="start wrap section">
+  <div class="box">
+    <div class="box-text">
+      <h2 id="start-title" class="box-title">Ten minutes to a demo brain.</h2>
+      <p>The fictional Acme company ships with the repo, traps included.</p>
+      <p class="box-links">
+        <a href={withBase("/docs/getting-started/quickstart/")}>Quickstart</a>
+        <a href={withBase("/docs/getting-started/your-own-instance/")}>Your own instance</a>
+      </p>
+    </div>
+    <div class="cmd-wrap">
+      <pre class="panel-light cmds"><code>{commands.map((cmd, i) => <span class="line"><span class="ps" aria-hidden="true">$ </span>{cmd}{i < commands.length - 1 ? "\n" : ""}</span>)}</code></pre>
+      <button type="button" class="copy" data-copy={commands.join("\n")} aria-label="Copy the three commands">
+        <span class="copy-label">copy</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>("button[data-copy]")) {
+    button.addEventListener("click", async () => {
+      const label = button.querySelector(".copy-label");
+      const text = button.dataset.copy ?? "";
+      try {
+        await navigator.clipboard.writeText(text);
+        if (label) label.textContent = "copied";
+      } catch {
+        if (label) label.textContent = "select and copy";
+      }
+      setTimeout(() => {
+        if (label) label.textContent = "copy";
+      }, 2000);
+    });
+  }
+</script>
+
+<style>
+  .box {
+    border: 2px solid var(--ink);
+    border-radius: 22px;
+    padding: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+  }
+  .box > * {
+    min-width: 0;
+  }
+  .box-text {
+    flex: 1 1 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .box-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: clamp(26px, 1.1rem + 2vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+  .box-text p {
+    margin: 0;
+    color: var(--body);
+    font-size: 17px;
+  }
+  .box-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+  .cmd-wrap {
+    position: relative;
+    flex: 1 1 460px;
+  }
+  .cmds {
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .cmds code {
+    font: inherit;
+  }
+  .ps {
+    color: var(--accent-ink);
+    user-select: none;
+  }
+  .copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .copy:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  @media (max-width: 640px) {
+    .box {
+      padding: 24px 18px;
+      gap: 24px;
+      border-radius: 18px;
+    }
+    .cmds {
+      padding: 48px 16px 16px;
+      font-size: 13px;
+    }
+  }
+</style>

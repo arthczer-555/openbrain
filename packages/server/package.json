@@ -1,0 +1,21 @@
+{
+  "name": "@openbrain/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenBrain chatbot server: HTTP handlers (Netlify Functions or local), auth, quotas, stores.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./protocol": "./src/protocol.ts",
+    "./session": "./src/session.ts"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.4",
+    "@openbrain/agent": "0.0.0",
+    "@openbrain/core": "0.0.0",
+    "@openbrain/llm": "0.0.0",
+    "@openbrain/retrieval": "0.0.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  }
+}

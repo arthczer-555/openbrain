@@ -1,0 +1,9 @@
+{
+  "sha": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+  "commit": { "message": "Fix SSO redirect loop", "committer": { "date": "2026-10-21T09:15:00Z" } },
+  "stats": { "total": 15, "additions": 12, "deletions": 3 },
+  "files": [
+    { "filename": "src/auth/sso.ts", "status": "modified", "additions": 10, "deletions": 3 },
+    { "filename": "docs/api/auth.md", "status": "modified", "additions": 2, "deletions": 0 }
+  ]
+}

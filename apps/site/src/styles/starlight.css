@@ -1,0 +1,115 @@
+/* Starlight theme: same fonts, accent and neutrals as the landing page (tokens.css). */
+
+:root {
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+  --sl-text-body: 1.0625rem;
+  --sl-line-height: 1.65;
+  --sl-content-width: 48rem;
+
+  /* Dark theme */
+  --sl-color-accent-low: #3a0015;
+  --sl-color-accent: #ff2e6e;
+  --sl-color-accent-high: #ffb3c8;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #efeff3;
+  --sl-color-gray-2: #d6d6de;
+  --sl-color-gray-3: #a0a0ab;
+  --sl-color-gray-4: #6a6a75;
+  --sl-color-gray-5: #3a3a44;
+  --sl-color-gray-6: #1c1c22;
+  --sl-color-black: #111114;
+}
+
+:root[data-theme="light"] {
+  --sl-color-accent-low: #fff0f4;
+  --sl-color-accent: #c8003f;
+  --sl-color-accent-high: #8f002d;
+  --sl-color-white: #111114;
+  --sl-color-gray-1: #26262d;
+  --sl-color-gray-2: #3a3a42;
+  --sl-color-gray-3: #5a5a64;
+  --sl-color-gray-4: #8e8e99;
+  --sl-color-gray-5: #d6d6de;
+  --sl-color-gray-6: #efeff3;
+  --sl-color-gray-7: #fafafb;
+  --sl-color-black: #ffffff;
+  --sl-color-bg-nav: #ffffff;
+}
+
+/* Headings in JetBrains Mono, like the landing page. */
+h1#_top,
+.sl-markdown-content :is(h1, h2, h3, h4) {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content :is(h3, h4) {
+  letter-spacing: -0.02em;
+}
+
+/* Navigation and sidebar in mono, as on the landing header. */
+.sidebar-content a,
+.sidebar-content summary,
+starlight-toc a,
+.pagination-links a {
+  font-family: var(--font-mono);
+}
+
+.sidebar-content a {
+  font-size: 0.875rem;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  text-underline-offset: 0.18em;
+}
+
+/* Tables: compact, readable on small screens. */
+.sl-markdown-content table {
+  font-size: 0.9375rem;
+}
+
+.sl-markdown-content table code {
+  white-space: nowrap;
+}
+
+/* Keyboard focus, visible on every interactive element. */
+:where(a, button, summary, input, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--sl-color-text-accent);
+  outline-offset: 2px;
+}
+
+/* Heading scale: JetBrains Mono is wide, so the steps are a little smaller than Starlight's defaults. */
+@media (min-width: 50em) {
+  :root {
+    --sl-text-h1: 2.5rem;
+    --sl-text-h2: 1.75rem;
+    --sl-text-h3: 1.375rem;
+    --sl-text-h4: 1.125rem;
+  }
+}
+
+/* Asides in the site palette: notes are neutral, tips use the soft pink. */
+.starlight-aside {
+  border-radius: 0 10px 10px 0;
+}
+
+.starlight-aside--note {
+  --sl-color-asides-text-accent: var(--sl-color-white);
+  --sl-color-asides-border: var(--sl-color-gray-4);
+  background-color: var(--sl-color-gray-6);
+}
+
+.starlight-aside--tip {
+  --sl-color-asides-text-accent: var(--sl-color-accent-high);
+  --sl-color-asides-border: var(--sl-color-accent);
+  background-color: var(--sl-color-accent-low);
+}
+
+.starlight-aside__title {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}

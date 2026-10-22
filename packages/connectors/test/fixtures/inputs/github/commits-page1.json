@@ -1,0 +1,24 @@
+[
+  {
+    "sha": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+    "html_url": "https://github.com/acme/app/commit/c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+    "commit": {
+      "message": "Fix SSO redirect loop\n\nThe callback URL kept the old tenant.",
+      "author": { "name": "Dev A", "date": "2026-10-21T09:12:00Z" },
+      "committer": { "name": "GitHub", "date": "2026-10-21T09:15:00Z" }
+    },
+    "author": { "login": "dev-a", "type": "User" },
+    "parents": [{ "sha": "m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2" }]
+  },
+  {
+    "sha": "m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2",
+    "html_url": "https://github.com/acme/app/commit/m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2m2",
+    "commit": {
+      "message": "Merge pull request #42 from acme/feature/saml",
+      "author": { "name": "Dev B", "date": "2026-10-20T16:00:00Z" },
+      "committer": { "name": "GitHub", "date": "2026-10-20T16:00:00Z" }
+    },
+    "author": { "login": "dev-b", "type": "User" },
+    "parents": [{ "sha": "b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0" }, { "sha": "f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1" }]
+  }
+]

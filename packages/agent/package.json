@@ -1,0 +1,17 @@
+{
+  "name": "@openbrain/agent",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenBrain agent: lean prompt assembly, tool loop, guardrails, citations.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@openbrain/core": "0.0.0",
+    "@openbrain/llm": "0.0.0",
+    "@openbrain/retrieval": "0.0.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  }
+}

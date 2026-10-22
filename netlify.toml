@@ -1,0 +1,33 @@
+# OpenBrain chatbot on Netlify. The build never calls Notion: it compiles the committed mirror.
+# OPENBRAIN_ROOT selects the instance folder (default: the repo root; "examples/acme" for the demo data).
+
+[build]
+  command = "npm run openbrain -- guide check --root ${OPENBRAIN_ROOT:-.} && npm run openbrain -- bundle --root ${OPENBRAIN_ROOT:-.} && npm run build -w @openbrain/web"
+  publish = "apps/web/dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = [".openbrain/runtime/bundle.json"]
+
+# Single-page app: client-side routes (/admin, /login, /kb/...) are served by index.html.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; connect-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

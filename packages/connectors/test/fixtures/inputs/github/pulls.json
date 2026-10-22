@@ -1,0 +1,54 @@
+[
+  {
+    "number": 42,
+    "html_url": "https://github.com/acme/app/pull/42",
+    "state": "closed",
+    "title": "Add SSO with SAML",
+    "user": { "login": "dev-b", "type": "User" },
+    "body": "<!-- Describe your change -->\r\nAdds SAML 2.0 single sign-on for Business workspaces.\r\n\r\nCloses #40",
+    "labels": [{ "name": "feature" }, { "name": "auth" }],
+    "updated_at": "2026-10-20T16:01:00Z",
+    "closed_at": "2026-10-20T16:00:00Z",
+    "merged_at": "2026-10-20T16:00:00Z",
+    "base": { "ref": "main" }
+  },
+  {
+    "number": 41,
+    "html_url": "https://github.com/acme/app/pull/41",
+    "state": "closed",
+    "title": "Experiment: dark mode",
+    "user": { "login": "dev-a", "type": "User" },
+    "body": "Not going ahead.",
+    "labels": [],
+    "updated_at": "2026-10-18T11:00:00Z",
+    "closed_at": "2026-10-18T11:00:00Z",
+    "merged_at": null,
+    "base": { "ref": "main" }
+  },
+  {
+    "number": 39,
+    "html_url": "https://github.com/acme/app/pull/39",
+    "state": "closed",
+    "title": "Bump vite from 7.1.0 to 7.1.2",
+    "user": { "login": "dependabot[bot]", "type": "Bot" },
+    "body": "Bumps vite.",
+    "labels": [{ "name": "dependencies" }],
+    "updated_at": "2026-10-17T08:00:00Z",
+    "closed_at": "2026-10-17T08:00:00Z",
+    "merged_at": "2026-10-17T08:00:00Z",
+    "base": { "ref": "main" }
+  },
+  {
+    "number": 30,
+    "html_url": "https://github.com/acme/app/pull/30",
+    "state": "closed",
+    "title": "Old change",
+    "user": { "login": "dev-c", "type": "User" },
+    "body": "",
+    "labels": [],
+    "updated_at": "2026-10-01T08:00:00Z",
+    "closed_at": "2026-10-01T08:00:00Z",
+    "merged_at": "2026-10-01T08:00:00Z",
+    "base": { "ref": "main" }
+  }
+]

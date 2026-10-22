@@ -1,0 +1,126 @@
+---
+import { withBase } from "../../lib/paths";
+
+interface Item {
+  q: string;
+  a: string;
+  link?: { href: string; text: string };
+}
+
+const items: Item[] = [
+  {
+    q: "Do I need Claude Code?",
+    a: "Yes, to set up the base and for the weekly update: /setup, /init, /weekly and /write run in Claude Code, on your Claude subscription, so maintenance has no API bill. Building a base the chatbot can trust takes judgment on every page, so there is no manual path. The deployed chatbot does not need Claude Code: it runs on Netlify with any LLM provider, and your team only needs a browser.",
+    link: { href: "/docs/getting-started/claude-code/", text: "Why Claude Code is required" },
+  },
+  {
+    q: "What does it cost?",
+    a: "The code is free. Netlify's free plan is enough to start, since the access-code sign-in works on every plan. You pay your LLM provider per question (see the estimator above), with a monthly spending cap that pauses the chatbot when it is reached ($50 by default). The weekly update runs on your Claude subscription.",
+    link: { href: "/docs/deploy/netlify/", text: "Deploy on Netlify" },
+  },
+  {
+    q: "Is Notion mandatory?",
+    a: "Yes, in v1. Notion is the single source of truth: the chatbot only reads its mirror, and every other tool (files, websites, GitHub, Google Drive, any MCP server) feeds Notion instead of answering directly. A store interface leaves room for other knowledge stores later.",
+    link: { href: "/docs/concepts/notion-and-the-mirror/", text: "Notion and the mirror" },
+  },
+  {
+    q: "What about privacy?",
+    a: "Your instance lives in your private repo, your Notion and your Netlify site. Questions and the passages used to answer them go to the LLM provider you choose, under its API terms. Tool tokens never leave your machine, access codes are stored as hashes, and openbrain doctor checks the repo is private before you deploy. Flags are kept until the weekly update processes them, conversations for 24 hours.",
+    link: { href: "/docs/security/", text: "Security and privacy" },
+  },
+  {
+    q: "Is it ready for production?",
+    a: "v0.1 is implemented and tested locally, including an end-to-end run of the chatbot in a browser and evals on the fictional Acme company. Runs against real LLM APIs and real Netlify deployments are being validated: try the demo, then a pilot with one team.",
+    link: { href: "/docs/", text: "Status in the docs" },
+  },
+  {
+    q: "How is it different from a classic RAG?",
+    a: "One source with no known contradiction (conflicts are settled before anything is written to Notion), a routing registry checked against Notion at every build, warnings that travel with the passage they apply to, and a context budget enforced in code. Every unanswered question becomes a fix, then a test.",
+    link: { href: "/docs/concepts/lean-brain/", text: "The lean brain" },
+  },
+  {
+    q: "Can I host it elsewhere than Netlify?",
+    a: "Later. v0.1 targets Netlify Functions and Netlify Blobs; other hosts are planned. Locally, openbrain serve runs the same chatbot on your machine.",
+    link: { href: "/docs/reference/cli/", text: "CLI reference" },
+  },
+];
+---
+
+<section id="faq" aria-labelledby="faq-title" class="faq wrap section split">
+  <div class="col-text faq-head">
+    <span class="kicker">// faq</span>
+    <h2 id="faq-title" class="h2">Questions, answered from the docs.</h2>
+  </div>
+  <div class="col-wide list">
+    {
+      items.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <div class="answer">
+            <p>{item.a}</p>
+            {item.link && (
+              <a href={withBase(item.link.href)} class="more">
+                {item.link.text}
+              </a>
+            )}
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq {
+    align-items: flex-start;
+  }
+  .faq-head {
+    flex-basis: 320px;
+  }
+  .list {
+    border-top: 1px solid var(--line);
+  }
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    padding: 14px 4px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: "+";
+    flex: none;
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--accent-ink);
+  }
+  details[open] summary::after {
+    content: "-";
+  }
+  .answer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 4px 20px;
+  }
+  .answer p {
+    margin: 0;
+    color: var(--body);
+  }
+  .more {
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+</style>

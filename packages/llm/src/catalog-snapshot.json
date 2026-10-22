@@ -1,0 +1,527 @@
+{
+ "source": "https://models.dev/api.json",
+ "fetched_at": "2026-10-22",
+ "models": [
+  {
+   "provider": "anthropic",
+   "id": "claude-opus-5-5",
+   "name": "Claude Opus 5.5",
+   "released": "2026-09-22",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 4,
+    "output": 20,
+    "cacheRead": 0.2,
+    "cacheWrite": 5
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-sonnet-5-5",
+   "name": "Claude Sonnet 5.5",
+   "released": "2026-09-28",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 2,
+    "output": 10,
+    "cacheRead": 0.2,
+    "cacheWrite": 2.5
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-haiku-5-5",
+   "name": "Claude Haiku 5.5",
+   "released": "2026-10-07",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 0.1,
+    "output": 0.5,
+    "cacheRead": 0.01,
+    "cacheWrite": 0.125
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-fable-5-1",
+   "name": "Claude Fable 5.1",
+   "released": "2026-09-01",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 10,
+    "output": 50,
+    "cacheRead": 0.25,
+    "cacheWrite": 12.5
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-opus-5",
+   "name": "Claude Opus 5",
+   "released": "2026-07-24",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 5,
+    "output": 25,
+    "cacheRead": 0.5,
+    "cacheWrite": 6.25
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-sonnet-5",
+   "name": "Claude Sonnet 5",
+   "released": "2026-06-29",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 2,
+    "output": 10,
+    "cacheRead": 0.2,
+    "cacheWrite": 2.5
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-opus-4-8",
+   "name": "Claude Opus 4.8",
+   "released": "2026-05-28",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1000000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 5,
+    "output": 25,
+    "cacheRead": 0.5,
+    "cacheWrite": 6.25
+   }
+  },
+  {
+   "provider": "anthropic",
+   "id": "claude-haiku-4-5",
+   "name": "Claude Haiku 4.5 (latest)",
+   "released": "2025-10-15",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "context": 200000,
+   "maxOutput": 64000,
+   "cost": {
+    "input": 1,
+    "output": 5,
+    "cacheRead": 0.1,
+    "cacheWrite": 1.25
+   }
+  },
+  {
+   "provider": "openai",
+   "id": "gpt-6.1-sol",
+   "name": "GPT-6.1 Sol",
+   "released": "2026-09-29",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1050000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 2,
+    "output": 10,
+    "cacheRead": 0.1,
+    "cacheWrite": 2.5
+   }
+  },
+  {
+   "provider": "openai",
+   "id": "gpt-6-sol",
+   "name": "GPT-6 Sol",
+   "released": "2026-09-22",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1050000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 2,
+    "output": 10,
+    "cacheRead": 0.2,
+    "cacheWrite": 2.5
+   }
+  },
+  {
+   "provider": "openai",
+   "id": "gpt-6-luna",
+   "name": "GPT-6 Luna",
+   "released": "2026-09-22",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1050000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 0.1,
+    "output": 0.5,
+    "cacheRead": 0.01,
+    "cacheWrite": 0.125
+   }
+  },
+  {
+   "provider": "openai",
+   "id": "gpt-6-astra",
+   "name": "GPT-6 Astra",
+   "released": "2026-09-04",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1050000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 10,
+    "output": 50,
+    "cacheRead": 1,
+    "cacheWrite": 12.5
+   }
+  },
+  {
+   "provider": "openai",
+   "id": "gpt-5.6",
+   "name": "GPT-5.6",
+   "released": "2026-07-09",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1050000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 4,
+    "output": 20,
+    "cacheRead": 0.4,
+    "cacheWrite": 5
+   }
+  },
+  {
+   "provider": "openai",
+   "id": "gpt-5.6-luna",
+   "name": "GPT-5.6 Luna",
+   "released": "2026-07-09",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "context": 1050000,
+   "maxOutput": 128000,
+   "cost": {
+    "input": 0.2,
+    "output": 1.2,
+    "cacheRead": 0.02,
+    "cacheWrite": 0.25
+   }
+  },
+  {
+   "provider": "google",
+   "id": "gemini-4-argon",
+   "name": "Gemini 4 Argon",
+   "released": "2026-10-13",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high"
+   ],
+   "context": 1048576,
+   "maxOutput": 32768,
+   "cost": {
+    "input": 2,
+    "output": 10,
+    "cacheRead": 0.1
+   }
+  },
+  {
+   "provider": "google",
+   "id": "gemini-3.8-flash",
+   "name": "Gemini 3.8 Flash",
+   "released": "2026-09-02",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high"
+   ],
+   "context": 1048576,
+   "maxOutput": 65536,
+   "cost": {
+    "input": 0.75,
+    "output": 3.75,
+    "cacheRead": 0.075
+   }
+  },
+  {
+   "provider": "google",
+   "id": "gemini-3.5-flash-lite",
+   "name": "Gemini 3.5 Flash Lite",
+   "released": "2026-07-21",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "minimal",
+    "low",
+    "medium",
+    "high"
+   ],
+   "context": 1048576,
+   "maxOutput": 65536,
+   "cost": {
+    "input": 0.3,
+    "output": 2.5,
+    "cacheRead": 0.03
+   }
+  },
+  {
+   "provider": "google",
+   "id": "gemini-flash-latest",
+   "name": "Gemini Flash Latest",
+   "released": "2026-08-13",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "medium",
+    "high"
+   ],
+   "context": 1048576,
+   "maxOutput": 65536,
+   "cost": {
+    "input": 0.75,
+    "output": 3.75,
+    "cacheRead": 0.075
+   }
+  },
+  {
+   "provider": "mistral",
+   "id": "mistral-large-4",
+   "name": "Mistral Large 4",
+   "released": "2026-10-06",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "high"
+   ],
+   "context": 1048576,
+   "maxOutput": 262144,
+   "cost": {
+    "input": 0.68,
+    "output": 2.09,
+    "cacheRead": 0.07
+   }
+  },
+  {
+   "provider": "mistral",
+   "id": "mistral-medium-latest",
+   "name": "Mistral Medium (latest)",
+   "released": "2026-04-29",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "high"
+   ],
+   "context": 262144,
+   "maxOutput": 262144,
+   "cost": {
+    "input": 1.5,
+    "output": 7.5,
+    "cacheRead": 0.15
+   }
+  },
+  {
+   "provider": "mistral",
+   "id": "mistral-small-latest",
+   "name": "Mistral Small (latest)",
+   "released": "2026-03-16",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "none",
+    "high"
+   ],
+   "context": 262144,
+   "maxOutput": 256000,
+   "cost": {
+    "input": 0.15,
+    "output": 0.6,
+    "cacheRead": 0.015
+   }
+  },
+  {
+   "provider": "deepseek",
+   "id": "deepseek-v4-pro",
+   "name": "DeepSeek V4 Pro",
+   "released": "2026-08-13",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "high",
+    "max"
+   ],
+   "context": 1048576,
+   "maxOutput": 393216,
+   "cost": {
+    "input": 0.66,
+    "output": 1.98,
+    "cacheRead": 0.022
+   }
+  },
+  {
+   "provider": "deepseek",
+   "id": "deepseek-v4-flash",
+   "name": "DeepSeek V4 Flash",
+   "released": "2026-10-17",
+   "tools": true,
+   "structuredOutput": true,
+   "reasoning": true,
+   "effort": [
+    "low",
+    "high",
+    "max"
+   ],
+   "context": 1048576,
+   "maxOutput": 393216,
+   "cost": {
+    "input": 0.15,
+    "output": 0.6,
+    "cacheRead": 0.003
+   }
+  }
+ ],
+ "note": "Prices in USD per million tokens. Refresh with: openbrain models refresh"
+}

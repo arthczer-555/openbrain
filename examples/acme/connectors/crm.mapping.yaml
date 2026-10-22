@@ -1,0 +1,32 @@
+# Mapping of the fictional "Acme CRM" REST API onto the OpenBrain stream contract (see
+# packages/connectors/src/api/SETUP.md). Declared in openbrain.config.yaml like this (the key stays in .env):
+#
+#   inputs:
+#     api:
+#       crm:
+#         enabled: true
+#         base_url: "https://api.crm.acme.example/v2"
+#         auth: { type: bearer, env: ACME_CRM_TOKEN }
+#         mapping: ./connectors/crm.mapping.yaml
+#
+# The adapter only sends GET requests, and only to the host of base_url.
+
+kind: stream
+
+list:
+  path: /deals
+  # {{since_date}} is the start of the collection window as YYYY-MM-DD ({{since}} as an ISO date).
+  query: { updated_since: "{{since_date}}", limit: 100 }
+  items: "$.results[*]"
+  paginate: { cursor_param: after, next: "$.paging.next.after" }
+
+map:
+  id: "$.id"
+  title: "{{$.properties.name}}"
+  url: "https://crm.acme.example/deals/{{$.id}}"
+  modifiedAt: "$.updatedAt"
+  # Kept for triage only, never written to the knowledge base.
+  author: "$.owner.name"
+  text: "Deal {{$.properties.name}} moved to {{$.properties.stage}} ({{$.properties.plan}} plan)"
+
+event_kind: deal_change

@@ -1,0 +1,129 @@
+---
+// openbrain.config.yaml as an instance writes it: Notion is the knowledge, the other tools are inputs.
+import { withBase } from "../../lib/paths";
+
+const connectors: Array<{ id: string; label: string; status: "store" | "v0.1" | "planned" }> = [
+  { id: "notion", label: "Notion", status: "store" },
+  { id: "files", label: "Files", status: "v0.1" },
+  { id: "web", label: "Websites", status: "v0.1" },
+  { id: "github", label: "GitHub", status: "v0.1" },
+  { id: "gdrive", label: "Google Drive", status: "v0.1" },
+  { id: "mcp", label: "Any MCP server", status: "v0.1" },
+  { id: "slack", label: "Slack", status: "planned" },
+];
+---
+
+<section id="config" class="config wrap section split">
+  <pre class="col-wide panel-dark yaml"><code><span class="t-muted"># openbrain.config.yaml</span>
+notion: {"{"} root_page: "&lt;page-id&gt;" {"}"}  <span class="t-muted"># the only place the chatbot reads</span>
+inputs:  <span class="t-muted"># consolidated into Notion at each update</span>
+  gdrive: {"{"} folders: ["&lt;folder-id&gt;"] {"}"}
+  github: {"{"} repos: ["acme/desk"] {"}"}
+  mcp:
+    linear: {"{"} url: "&lt;server-url&gt;" {"}"}
+models:
+  chat: {"{"} provider: <span class="t-accent">anthropic</span>, model: "&lt;any&gt;" {"}"}
+  embeddings: {"{"} provider: <span class="t-accent">voyage</span>, model: "&lt;any&gt;" {"}"}</code></pre>
+  <div class="col-text">
+    <span class="kicker">// connectors and models</span>
+    <h2 class="h2">One source of truth. Your tools, your models.</h2>
+    <p class="lead">
+      Drive, GitHub, Slack, websites, files and any MCP server feed Notion at setup and at each update, after you
+      approve. Conflicts are settled before anything is written, so the chatbot never sees two versions. It reads Notion
+      only, with any LLM provider, switchable from the admin page.
+    </p>
+    <ul class="facts">
+      <li>Notion is the single source of truth</li>
+      <li>Source tokens stay on your machine</li>
+      <li>No database to run</li>
+    </ul>
+    <ul class="badges" aria-label="Connectors">
+      {
+        connectors.map((c) => (
+          <li class:list={["badge", `badge-${c.status === "planned" ? "planned" : c.status === "store" ? "store" : "ok"}`]}>
+            <span class="badge-name">{c.label}</span>{" "}
+            <span class="badge-status">{c.status === "store" ? "source of truth" : c.status === "planned" ? "planned" : "v0.1"}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="badges-note">
+      Until the Slack input ships, the weekly update reads Slack through your Slack MCP connector. <a href={withBase("/docs/connectors/inputs/")}>All inputs</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .config {
+    align-items: flex-start;
+  }
+  .yaml {
+    padding: 26px;
+    font-size: 14px;
+    line-height: 1.85;
+  }
+  .yaml code {
+    font: inherit;
+  }
+  .badges {
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .badge-status {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .badge-store {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: #ffffff;
+  }
+  .badge-store .badge-status {
+    color: var(--term-muted);
+  }
+  .badge-ok .badge-status {
+    color: var(--diff-add);
+  }
+  .badge-planned {
+    border-style: dashed;
+  }
+  .badges-note {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .badges-note a {
+    font-family: var(--font-mono);
+  }
+  .facts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--ink-3);
+  }
+  @media (max-width: 640px) {
+    .yaml {
+      padding: 18px;
+      font-size: 12.5px;
+    }
+  }
+</style>

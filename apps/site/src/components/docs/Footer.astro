@@ -1,0 +1,32 @@
+---
+// Starlight footer (edit link, pagination) + the author and license line of the landing page.
+import DefaultFooter from "@astrojs/starlight/components/Footer.astro";
+import { LICENSE_TEXT } from "../../consts";
+---
+
+<DefaultFooter />
+<div class="ob-docs-footer">
+  <span class="ob-docs-footer-brand">open source, by Arthur Czernichow</span>
+  <span>{LICENSE_TEXT}</span>
+</div>
+
+<style>
+  .ob-docs-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--sl-color-gray-3);
+  }
+  .ob-docs-footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

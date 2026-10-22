@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Single sign-on | Acme Docs</title>
+  <style>body { font-family: sans-serif; }</style>
+  <script>window.tracking = { id: "acme" };</script>
+</head>
+<body>
+  <header class="site-header">
+    <a href="/">Acme</a>
+    <nav><a href="/pricing">Pricing</a> <a href="/blog">Blog</a></nav>
+  </header>
+  <div id="cookie-banner" hidden>Cookie settings</div>
+  <aside class="sidebar"><a href="/docs/getting-started">Getting started</a></aside>
+  <main>
+    <article>
+      <header><h1>Single sign-on</h1></header>
+      <p>Acme supports <strong>SAML 2.0</strong> and <em>OpenID Connect</em>.</p>
+      <h2>Requirements</h2>
+      <ul>
+        <li>An admin account</li>
+        <li>Your identity provider metadata URL</li>
+      </ul>
+      <h2>Enable SSO</h2>
+      <ol>
+        <li>Open <b>Settings</b></li>
+        <li>Click <a href="../docs/security">Security</a>
+          <ul><li>Choose SAML</li></ul>
+        </li>
+      </ol>
+      <table>
+        <thead><tr><th>Plan</th><th>SSO</th><th>Price</th></tr></thead>
+        <tbody>
+          <tr><td>Starter</td><td>No</td><td>10 | 12 EUR</td></tr>
+          <tr><td>Business</td><td>Yes</td><td>25 EUR</td></tr>
+        </tbody>
+      </table>
+      <pre><code class="language-bash">acme sso enable --provider okta
+</code></pre>
+      <blockquote><p>Allow up to 24 hours for the change to apply.</p></blockquote>
+      <p>If the login loops, run <code>acme login</code> again.</p>
+      <p><a href="javascript:void(0)">Show more</a></p>
+      <footer>Was this page helpful?</footer>
+    </article>
+  </main>
+  <footer class="site-footer">&copy; 2026 Acme. All rights reserved.</footer>
+  <script src="/app.js"></script>
+</body>
+</html>

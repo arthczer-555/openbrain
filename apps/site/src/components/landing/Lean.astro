@@ -1,0 +1,59 @@
+---
+const removed = [
+  "load the full page registry on every question",
+  "fetch three whole pages to use ten lines",
+  "send forty tool definitions each call",
+];
+const added = [
+  "2,500-token fixed prompt (budget enforced)",
+  "search passages, read one section if needed",
+  "3 tools: search, read, report_gap",
+  "warnings arrive with their document",
+];
+---
+
+<section aria-label="Lean by design" class="lean wrap section split">
+  <div class="col-text">
+    <span class="kicker">// lean by design</span>
+    <h2 class="h2">What the agent reads per question.</h2>
+    <p class="lead">
+      A small fixed prompt, a few passages, and the warnings that belong to them. The budget is checked at build, so it
+      cannot grow back in silence.
+    </p>
+    <p class="mono-note">[N]x fewer tokens than our previous agent [MEASURED IN BENCHMARK]</p>
+  </div>
+  <pre class="col-wide panel-light diff"><code>{removed.map((line) => <span class="del">- {line}</span>)}{added.map((line) => <span class="add">+ {line}</span>)}</code></pre>
+</section>
+
+<style>
+  .lean {
+    align-items: flex-start;
+  }
+  .diff {
+    padding: 24px;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .diff code {
+    font: inherit;
+    white-space: pre-wrap;
+  }
+  .del,
+  .add {
+    display: block;
+    padding-left: 2ch;
+    text-indent: -2ch;
+  }
+  .del {
+    color: var(--diff-del);
+  }
+  .add {
+    color: var(--diff-add);
+  }
+  @media (max-width: 640px) {
+    .diff {
+      padding: 18px;
+      font-size: 13px;
+    }
+  }
+</style>

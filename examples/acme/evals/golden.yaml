@@ -1,0 +1,383 @@
+# Golden questions for the Acme example.
+# behavior: answer | not_documented | clarify | refuse
+# must_include facts appear verbatim in a cited page (numbers, field names), so a good answer can quote them,
+# in English or in French. Traps covered: same word with two meanings (user, account,
+# plan, SLA), a child setting capped by its parent, a procedure spread over three pages, information absent,
+# to_confirm and stale pages, warnings to apply, French questions, out of scope.
+
+- id: scope-beats-keyword-01
+  question: "How do I add a user in the internal tool?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/accounts"]
+    must_not_cite: ["admin/users"]
+    must_include: ["Add teammate"]
+    must_not_include: ["CSV"]
+  tags: [routing, trap, same-word]
+
+- id: scope-beats-keyword-02-fr
+  question: "Comment ajouter un utilisateur dans l'outil interne ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/accounts"]
+    must_not_cite: ["admin/users"]
+  tags: [routing, trap, same-word, multilingual]
+
+- id: client-user-01
+  question: "How do I import client users from a CSV file?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["admin/users"]
+    must_include: ["Import CSV"]
+  tags: [routing]
+
+- id: parent-level-01
+  question: "Why can't I enable live chat on a client group?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["admin/groups", "admin/companies"]
+    must_include: ["Allowed channels"]
+  tags: [parent-level, trap]
+
+- id: procedure-three-docs-01
+  question: "Walk me through setting up a newly signed client."
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["admin/client-onboarding-runbook", "admin/companies", "sales/account-roles-and-handover"]
+  tags: [coverage, trap]
+
+- id: single-source-01
+  question: "How long do we keep ticket data?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["product/data-retention"]
+    must_include: ["24 months"]
+    must_not_include: ["12 months"]
+  tags: [single-source]
+
+- id: to-confirm-01
+  question: "What is the price of the Enterprise plan?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["sales/pricing"]
+    must_include: ["to be confirmed"]
+  tags: [status, trap]
+
+- id: not-documented-01
+  question: "What is our parental leave top-up policy?"
+  lang: en
+  expect:
+    behavior: not_documented
+    must_cite: []
+  tags: [abstention, trap]
+
+- id: language-01-fr
+  question: "Quelle est la politique de télétravail ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["people/remote-work"]
+    must_include: ["trois jours"]
+  tags: [multilingual]
+
+- id: out-of-scope-01
+  question: "Can you write me a poem about the weather?"
+  lang: en
+  expect:
+    behavior: refuse
+    must_cite: []
+  tags: [scope]
+
+- id: sla-01
+  question: "Do holidays pause the SLA clock?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["product/sla-and-business-hours"]
+  tags: [factual]
+
+- id: handover-01
+  question: "Who runs the launch meeting with a new client?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["sales/account-roles-and-handover"]
+  tags: [factual]
+
+- id: on-premise-01
+  question: "Can a client host Acme Desk on its own servers?"
+  lang: en
+  expect:
+    behavior: answer
+    must_include: ["on-premise"]
+  tags: [instance-rule]
+
+# Same word, two meanings: "account" (Hub login, Billing member, billing account), "plan", "SLA".
+
+- id: account-trap-01
+  question: "How do I give a colleague access to Acme Billing?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/billing-overview"]
+    must_not_cite: ["internal-tools/accounts", "internal-tools/billing-accounts"]
+    must_include: ["Invite member"]
+    must_not_include: ["Add teammate"]
+  tags: [routing, trap, same-word, warning]
+
+- id: account-trap-02-fr
+  question: "Comment créer un compte de facturation pour un nouveau client ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/billing-accounts"]
+    must_not_cite: ["internal-tools/accounts"]
+    must_include: ["New billing account"]
+  tags: [routing, trap, same-word, multilingual]
+
+- id: plan-trap-01
+  question: "What goes into an account plan for a strategic client?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["sales/account-plans"]
+    must_not_cite: ["sales/pricing", "product/plans-and-features"]
+    must_include: ["Stakeholders"]
+  tags: [routing, trap, same-word]
+
+- id: plan-trap-02
+  question: "Which plan does a client need to get single sign-on?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["product/plans-and-features"]
+    must_not_cite: ["sales/account-plans"]
+    must_include: ["Enterprise"]
+  tags: [routing, trap, same-word]
+
+- id: sla-trap-01
+  question: "What uptime SLA do we commit to in our client contracts?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["support-ops/uptime-commitment"]
+    must_not_cite: ["product/sla-and-business-hours", "admin/sla-policies"]
+    must_include: ["99.9%"]
+  tags: [routing, trap, same-word, warning]
+
+- id: sla-trap-02-fr
+  question: "Comment configurer un SLA pour un groupe d'un client ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["admin/sla-policies"]
+    must_not_cite: ["support-ops/uptime-commitment"]
+    must_include: ["New policy"]
+  tags: [routing, trap, same-word, multilingual]
+
+# A child setting capped by its parent.
+
+- id: parent-level-02
+  question: "Why can't I add a second SLA policy for a client on the Starter plan?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["admin/sla-policies", "product/plans-and-features"]
+    must_include: ["one SLA policy"]
+  tags: [parent-level, trap]
+
+- id: parent-level-03-fr
+  question: "Pourquoi le téléphone n'apparaît pas dans les canaux autorisés d'une entreprise en Growth ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["admin/companies", "product/plans-and-features"]
+    must_include: ["Enterprise"]
+  tags: [parent-level, trap, multilingual]
+
+# A procedure spread over three pages.
+
+- id: procedure-three-docs-02
+  question: "How do we upgrade the plan of a client from Growth to Enterprise during its annual contract?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/billing-plan-changes", "admin/companies", "sales/proposals-and-order-forms"]
+    must_include: ["Change plan"]
+  tags: [coverage, trap]
+
+- id: procedure-three-docs-03
+  question: "A client has cancelled: walk me through its offboarding, including its data export."
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["admin/client-offboarding", "sales/renewals-and-cancellations", "product/data-export"]
+    must_include: ["Close company"]
+  tags: [coverage, trap]
+
+# Information absent: plausible near-miss pages exist, the answer does not.
+
+- id: not-documented-02
+  question: "Does Acme Desk support SCIM user provisioning?"
+  lang: en
+  expect:
+    behavior: not_documented
+    must_cite: []
+  tags: [abstention, trap]
+
+- id: not-documented-03
+  question: "How much is the yearly learning budget per employee?"
+  lang: en
+  expect:
+    behavior: not_documented
+    must_cite: []
+  tags: [abstention, trap]
+
+- id: not-documented-04-fr
+  question: "Existe-t-il une application mobile Acme Desk pour les agents ?"
+  lang: fr
+  expect:
+    behavior: not_documented
+    must_cite: []
+  tags: [abstention, trap, multilingual]
+
+- id: not-documented-05
+  question: "How are engineers compensated for their on-call weeks?"
+  lang: en
+  expect:
+    behavior: not_documented
+    must_cite: []
+  tags: [abstention, trap]
+
+- id: not-documented-06-fr
+  question: "Quelle est la politique de voiture de fonction ?"
+  lang: fr
+  expect:
+    behavior: not_documented
+    must_cite: []
+  tags: [abstention, trap, multilingual]
+
+# Pages marked to_confirm or stale in the registry.
+
+- id: to-confirm-02
+  question: "Can I paste the tickets of a client into a free online AI chatbot to summarise them?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["legal-security/ai-tools-policy"]
+    must_include: ["to be confirmed"]
+  tags: [status, trap]
+
+- id: to-confirm-03-fr
+  question: "Combien coûte le plan Enterprise par siège agent ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["sales/pricing"]
+    must_include: ["59"]
+  tags: [status, trap, multilingual]
+
+- id: stale-01
+  question: "When is the weekly Acme Hub report sent, and to whom?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/hub-reports"]
+    must_not_cite: ["product/reports"]
+    must_include: ["Monday"]
+  tags: [status, stale]
+
+- id: stale-02-fr
+  question: "Qui peut voir le module Reports d'Acme Hub ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["internal-tools/hub-reports"]
+    must_not_cite: ["product/reports"]
+    must_include: ["Admin"]
+  tags: [status, stale, multilingual]
+
+# Warnings of the registry that must be applied.
+
+- id: warning-02
+  question: "We have an incident: a client says its ticket data was exposed to another company. Which process do we follow?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["legal-security/security-incidents"]
+    must_not_cite: ["support-ops/incident-communication"]
+    must_include: ["48 hours"]
+  tags: [routing, trap, warning]
+
+- id: warning-03
+  question: "What are the hours of Acme support for a client on the Growth plan?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["support-ops/support-hours"]
+    must_not_cite: ["admin/sla-policies", "product/sla-and-business-hours"]
+    must_include: ["19:00"]
+  tags: [routing, trap, warning, same-word]
+
+# Out of scope.
+
+- id: out-of-scope-02-fr
+  question: "Quel temps fera-t-il à Lyon demain ?"
+  lang: fr
+  expect:
+    behavior: refuse
+    must_cite: []
+  tags: [scope, multilingual]
+
+- id: out-of-scope-03
+  question: "Can you book me a table at a restaurant for Friday night?"
+  lang: en
+  expect:
+    behavior: refuse
+    must_cite: []
+  tags: [scope]
+
+# Factual and coverage questions on the new sections.
+
+- id: leave-01-fr
+  question: "Combien de jours de congés payés a-t-on par an ?"
+  lang: fr
+  expect:
+    behavior: answer
+    must_cite: ["people/annual-leave"]
+    must_include: ["25"]
+  tags: [factual, multilingual]
+
+- id: credit-01
+  question: "A client had a long outage last month: how do we give them a service credit?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["support-ops/refunds-and-credits", "internal-tools/billing-credit-notes"]
+    must_include: ["Service credit"]
+  tags: [coverage]
+
+- id: dsr-01
+  question: "A customer of one of our clients emails us to have their personal data deleted. What do we do?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["legal-security/data-subject-requests"]
+    must_include: ["2 business days"]
+  tags: [factual]
+
+- id: certification-01
+  question: "Are we ISO 27001 certified?"
+  lang: en
+  expect:
+    behavior: answer
+    must_cite: ["legal-security/certifications"]
+    must_include: ["in progress"]
+  tags: [factual, single-source]

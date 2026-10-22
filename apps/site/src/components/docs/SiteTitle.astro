@@ -1,0 +1,36 @@
+---
+// Docs header: the same wordmark as the landing page, linking back to it.
+import Logo from "../Logo.astro";
+import { withBase } from "../../lib/paths";
+---
+
+<a href={withBase("/")} class="ob-site-title">
+  <Logo size={28} />
+  <span translate="no">openbrain</span>
+  <span class="ob-site-title-docs">docs</span>
+</a>
+
+<style>
+  .ob-site-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--sl-color-white);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ob-site-title-docs {
+    font-weight: 500;
+    font-size: 0.8125rem;
+    color: var(--sl-color-gray-3);
+  }
+  .ob-site-title-docs::before {
+    content: "/";
+    margin-right: 6px;
+    color: var(--sl-color-gray-4);
+  }
+</style>

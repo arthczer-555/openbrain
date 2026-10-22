@@ -1,0 +1,20 @@
+{
+  "name": "@openbrain/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenBrain command line.",
+  "bin": {
+    "openbrain": "./bin/openbrain.js"
+  },
+  "dependencies": {
+    "@openbrain/agent": "0.0.0",
+    "@openbrain/connectors": "0.0.0",
+    "@openbrain/core": "0.0.0",
+    "@openbrain/llm": "0.0.0",
+    "@openbrain/retrieval": "0.0.0",
+    "@openbrain/server": "0.0.0",
+    "tsx": "^4.23.15",
+    "yaml": "^2.9.1"
+  }
+}

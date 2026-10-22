@@ -1,0 +1,13 @@
+{
+  "id": 100001,
+  "node_id": "R_acme_app",
+  "name": "app",
+  "full_name": "acme/app",
+  "private": true,
+  "owner": { "login": "acme", "type": "Organization" },
+  "html_url": "https://github.com/acme/app",
+  "description": "The Acme planning app (fictional)",
+  "default_branch": "main",
+  "visibility": "private",
+  "permissions": { "admin": false, "maintain": false, "push": false, "triage": false, "pull": true }
+}

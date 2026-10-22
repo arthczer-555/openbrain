@@ -1,0 +1,33 @@
+{
+  "name": "openbrain",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Compile your company knowledge from your tools into a lean, cited chatbot that improves every week.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "openbrain": "tsx packages/cli/src/main.ts",
+    "demo": "tsx packages/cli/src/main.ts demo",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit",
+    "lint": "tsx packages/cli/src/main.ts lint --root examples/acme",
+    "dev:web": "npm run dev -w @openbrain/web",
+    "dev:site": "npm run dev -w @openbrain/site",
+    "demo:search": "tsx packages/cli/src/main.ts search \"How do I add a user in the internal tool?\" --root examples/acme",
+    "e2e": "node scripts/e2e-smoke.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

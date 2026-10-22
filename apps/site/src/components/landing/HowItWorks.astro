@@ -1,0 +1,138 @@
+---
+import { withBase } from "../../lib/paths";
+
+const steps = [
+  {
+    cmd: "/setup",
+    title: "Connect",
+    text: "In Claude Code: share one Notion root page with a read-only integration, then plug in your other tools with a read-only token or the MCP connectors you already use.",
+  },
+  {
+    cmd: "/init",
+    title: "Consolidate into Notion",
+    text: "Claude reads Drive, Slack, GitHub and the rest, proposes what to write into Notion and waits for your go-ahead. Conflicts are settled first.",
+  },
+  {
+    cmd: "openbrain deploy",
+    title: "Deploy",
+    text: "The Notion mirror is compiled into a passage index and the chatbot goes live on Netlify, behind an access code or Google sign-in.",
+  },
+  {
+    cmd: "/weekly",
+    title: "Improve weekly",
+    text: "Run /weekly in Claude Code. Unanswered questions and thumbs down come back as fixes to Notion and the registry, then as tests.",
+  },
+];
+---
+
+<section aria-labelledby="how-title" class="how wrap section">
+  <div class="how-head">
+    <span class="kicker">// how it works</span>
+    <h2 id="how-title" class="h2">Four steps, one source of truth.</h2>
+  </div>
+  <ol class="steps">
+    {
+      steps.map((step, i) => (
+        <li class="step">
+          <span class="step-cmd">
+            <span class="step-num">{String(i + 1).padStart(2, "0")}</span> {step.cmd}
+          </span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))
+    }
+  </ol>
+  <p class="status">
+    <span class="tag">status</span> v0.1 is implemented and tested locally: the CLI, the chatbot and its admin, the inputs and the
+    Claude Code skills. Runs against real LLM APIs and real Netlify deployments are being validated.{" "}
+    <a href={withBase("/docs/")}>Read the docs</a> for the details.
+  </p>
+</section>
+
+<style>
+  .how-head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    counter-reset: none;
+  }
+  .step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+  }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 34px;
+    right: -13px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--accent);
+    border-right: 2px solid var(--accent);
+    transform: rotate(45deg);
+    background: var(--bg);
+  }
+  .step-cmd {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .step-num {
+    color: var(--accent-ink);
+    font-weight: 700;
+  }
+  .step h3 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .step p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--body);
+  }
+  .status {
+    margin-top: 24px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .status .tag {
+    margin-right: 8px;
+  }
+  .status code {
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  @media (max-width: 1000px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .step::after {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

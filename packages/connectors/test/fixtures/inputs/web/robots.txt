@@ -1,0 +1,10 @@
+# Acme robots.txt (fictional)
+User-agent: *
+Disallow: /docs/internal/
+Crawl-delay: 5
+
+User-agent: OpenBrain
+Disallow: /docs/private
+Allow: /docs/private/public-page
+
+Sitemap: https://acme.example/sitemap.xml

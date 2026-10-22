@@ -1,0 +1,35 @@
+# Optional reminder for instances: opens an issue when the weekly update is late.
+# No LLM, no key. Reads state/sync.json (`last_weekly`), written by `openbrain weekly finish`.
+
+name: Weekly update reminder
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  remind:
+    if: vars.OPENBRAIN_UPSTREAM != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check the date of the last weekly update
+        id: age
+        run: |
+          last=$(node -e 'try{const s=require("./state/sync.json");console.log(s.last_weekly||"")}catch{console.log("")}')
+          if [ -z "$last" ]; then echo "days=never" >> "$GITHUB_OUTPUT"; exit 0; fi
+          days=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 86400 ))
+          echo "days=$days" >> "$GITHUB_OUTPUT"
+      - name: Open a reminder issue
+        if: steps.age.outputs.days == 'never' || steps.age.outputs.days > 8
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Weekly update to run"
+          if gh issue list --state open --search "$title in:title" --json number -q '.[0].number' | grep -q .; then exit 0; fi
+          gh issue create --title "$title" --body "The last weekly update was ${{ steps.age.outputs.days }} days ago. In the repository: \`claude\` then \`/weekly\` (about 20 minutes). Flagged questions are waiting in /admin."

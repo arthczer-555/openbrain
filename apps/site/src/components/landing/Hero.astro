@@ -1,0 +1,63 @@
+---
+import { REPO_HREF, REPO_URL_TEXT } from "../../consts";
+import { withBase } from "../../lib/paths";
+---
+
+<section id="top" class="hero wrap">
+  <span class="prompt">$ an open source brain for your company</span>
+  <h1>Clone. Connect. Deploy.<br />Your docs answer back<span class="cursor" aria-hidden="true">_</span></h1>
+  <p class="intro">
+    OpenBrain consolidates what lives in Drive, Slack and any MCP server into Notion, your single source of truth, then
+    deploys a chatbot on Netlify that answers only from it, with sources. Once a week, you run one command and it learns
+    from what it missed.
+  </p>
+  <div class="actions">
+    <a href={withBase("/docs/getting-started/quickstart/")} class="btn btn-primary">Get started</a>
+    <a href={REPO_HREF} class="btn btn-ghost">git clone {REPO_URL_TEXT}</a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: 64px;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .prompt {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0;
+    max-width: 1050px;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: clamp(34px, 0.9rem + 4.6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+    overflow-wrap: break-word;
+  }
+  .cursor {
+    color: var(--accent);
+  }
+  .intro {
+    margin: 0;
+    max-width: 760px;
+    font-size: clamp(18px, 1rem + 0.4vw, 20px);
+    color: var(--body);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  @media (max-width: 640px) {
+    .hero {
+      padding-top: 40px;
+      gap: 22px;
+    }
+  }
+</style>

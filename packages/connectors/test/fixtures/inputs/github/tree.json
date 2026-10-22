@@ -1,0 +1,15 @@
+{
+  "sha": "9f1c0000000000000000000000000000000000aa",
+  "url": "https://api.github.com/repos/acme/app/git/trees/9f1c0000000000000000000000000000000000aa",
+  "tree": [
+    { "path": "CHANGELOG.md", "mode": "100644", "type": "blob", "sha": "b100000000000000000000000000000000000001", "size": 2048 },
+    { "path": "README.md", "mode": "100644", "type": "blob", "sha": "b100000000000000000000000000000000000002", "size": 512 },
+    { "path": "docs", "mode": "040000", "type": "tree", "sha": "t100000000000000000000000000000000000003" },
+    { "path": "docs/api", "mode": "040000", "type": "tree", "sha": "t100000000000000000000000000000000000004" },
+    { "path": "docs/api/auth.md", "mode": "100644", "type": "blob", "sha": "b100000000000000000000000000000000000005", "size": 300 },
+    { "path": "docs/logo.png", "mode": "100644", "type": "blob", "sha": "b100000000000000000000000000000000000006", "size": 9000 },
+    { "path": "docs/setup.md", "mode": "100644", "type": "blob", "sha": "b100000000000000000000000000000000000007", "size": 700 },
+    { "path": "src/index.ts", "mode": "100644", "type": "blob", "sha": "b100000000000000000000000000000000000008", "size": 1200 }
+  ],
+  "truncated": false
+}

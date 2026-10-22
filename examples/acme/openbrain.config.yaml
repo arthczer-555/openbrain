@@ -1,0 +1,36 @@
+# Configuration of the Acme example instance (a fictional company).
+# Secrets never go in this file: provider keys, SESSION_SECRET, ACCESS_CODE_HASH... live in the environment
+# (see .env.example at the repo root). The Acme mirror ships with the repo, so there is no Notion root page.
+
+instance:
+  name: Acme
+  kb_language: en
+
+chatbot:
+  assistant_name: Acme Brain
+  accent: "#F00050"
+  # mode: auto            # auto | agent | retrieval_first (models without tool calling)
+
+auth:
+  mode: passcode          # passcode | google | netlify
+  # allowed_domains: [acme.example]   # google mode: only these email domains
+  # identified: false                 # true: reports keep the email instead of a hash
+
+budgets:
+  monthly_usd: 50                     # the chat answers "budget reached" above this estimate
+  questions_per_user_per_day: 100
+
+models:
+  chat: { provider: anthropic, model: claude-opus-5-5, effort: low }
+  fallback:
+    - { provider: anthropic, model: claude-sonnet-5-5, effort: low }
+  # Optional hybrid search (BM25 + vectors): passages are embedded at deploy, the question at each search.
+  # embeddings: { provider: voyage, model: voyage-4-lite, dimensions: 512 }   # VOYAGE_API_KEY
+
+user_choice:
+  enabled: false
+  allowed: []                         # for example ["anthropic:claude-sonnet-5-5", "mistral:mistral-large-4"]
+
+# providers:
+#   openai_compatible:
+#     - { name: vllm-internal, base_url: "https://llm.acme.example/v1", api_key_env: ACME_LLM_KEY }

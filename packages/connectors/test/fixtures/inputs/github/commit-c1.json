@@ -1,0 +1,6 @@
+{
+  "sha": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+  "commit": { "message": "Document the SSO setup", "committer": { "date": "2026-10-16T10:00:00Z" } },
+  "stats": { "total": 42, "additions": 40, "deletions": 2 },
+  "files": [{ "filename": "docs/setup.md", "status": "renamed", "previous_filename": "docs/install.md", "additions": 40, "deletions": 2 }]
+}

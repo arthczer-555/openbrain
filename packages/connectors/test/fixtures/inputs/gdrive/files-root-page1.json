@@ -1,0 +1,12 @@
+{
+  "nextPageToken": "page-2",
+  "files": [
+    { "id": "fold-policies", "name": "Policies", "mimeType": "application/vnd.google-apps.folder", "modifiedTime": "2026-08-01T10:00:00.000Z", "webViewLink": "https://drive.google.com/drive/folders/fold-policies" },
+    { "id": "doc-onboarding", "name": "Onboarding", "mimeType": "application/vnd.google-apps.document", "modifiedTime": "2026-10-20T14:03:11.000Z", "webViewLink": "https://docs.google.com/document/d/doc-onboarding/edit" },
+    { "id": "sheet-pricing", "name": "Pricing", "mimeType": "application/vnd.google-apps.spreadsheet", "modifiedTime": "2026-10-19T08:00:00.000Z", "webViewLink": "https://docs.google.com/spreadsheets/d/sheet-pricing/edit" },
+    { "id": "slides-kickoff", "name": "Kickoff 2026", "mimeType": "application/vnd.google-apps.presentation", "modifiedTime": "2026-09-01T09:00:00.000Z", "webViewLink": "https://docs.google.com/presentation/d/slides-kickoff/edit" },
+    { "id": "pdf-contract", "name": "Template contract.pdf", "mimeType": "application/pdf", "modifiedTime": "2026-10-21T07:00:00.000Z", "size": "48211", "webViewLink": "https://drive.google.com/file/d/pdf-contract/view" },
+    { "id": "img-logo", "name": "logo.png", "mimeType": "image/png", "modifiedTime": "2026-10-21T07:00:00.000Z", "size": "1200", "webViewLink": "https://drive.google.com/file/d/img-logo/view" },
+    { "id": "docx-legacy", "name": "Legacy guide.docx", "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "modifiedTime": "2026-07-10T10:00:00.000Z", "size": "2048", "webViewLink": "https://docs.google.com/document/d/docx-legacy/edit" }
+  ]
+}

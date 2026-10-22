@@ -1,0 +1,13 @@
+{
+  "name": "@openbrain/retrieval",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenBrain retrieval: markdown chunker and dependency-free BM25F index.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@openbrain/core": "0.0.0"
+  }
+}

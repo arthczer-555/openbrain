@@ -1,0 +1,53 @@
+# Checks on every push and pull request. No LLM, no API key: free on GitHub Actions.
+# Upstream (repository variable OPENBRAIN_UPSTREAM=true): the engine tests and the Acme example.
+# Instance (any repo made from the template): its own mirror, registry and evals, plus the private-repo guard.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    env:
+      INSTANCE_ROOT: ${{ vars.OPENBRAIN_UPSTREAM == 'true' && 'examples/acme' || (vars.OPENBRAIN_ROOT || '.') }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      # T1: an instance repo holding knowledge must never be public.
+      - name: Private repository guard
+        if: vars.OPENBRAIN_UPSTREAM != 'true'
+        run: |
+          if [ "${{ github.event.repository.private }}" = "false" ] && [ -d knowledge ] && [ -n "$(ls -A knowledge 2>/dev/null)" ]; then
+            echo "::error::This repository is public and knowledge/ is not empty: make the repository private."
+            exit 1
+          fi
+
+      - name: Typecheck and unit tests
+        if: vars.OPENBRAIN_UPSTREAM == 'true'
+        run: |
+          npm run typecheck
+          npm test
+
+      - name: End-to-end smoke test (demo, headless Chrome)
+        if: vars.OPENBRAIN_UPSTREAM == 'true'
+        run: npm run e2e
+
+      - name: Knowledge base checks
+        run: |
+          npm run openbrain -- lint --root "$INSTANCE_ROOT"
+          npm run openbrain -- guide check --root "$INSTANCE_ROOT"
+
+      - name: Retrieval evals (no LLM)
+        if: hashFiles(format('{0}/evals/golden.yaml', env.INSTANCE_ROOT)) != ''
+        run: npm run openbrain -- eval --no-llm --root "$INSTANCE_ROOT"

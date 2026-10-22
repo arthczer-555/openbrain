@@ -1,0 +1,52 @@
+---
+import { LICENSE_TEXT, REPO_HREF } from "../../consts";
+import { withBase } from "../../lib/paths";
+---
+
+<footer class="site-footer wrap">
+  <div class="brand">
+    <span>open source, by Arthur Czernichow</span>
+  </div>
+  <nav aria-label="Footer" class="links">
+    <a href={withBase("/docs/")}>docs</a>
+    <a href={REPO_HREF}>github</a>
+    <a href={withBase("/docs/security/")}>security</a>
+    <a href={withBase("/docs/contributing/")}>contributing</a>
+    <span>{LICENSE_TEXT}</span>
+  </nav>
+</footer>
+
+<style>
+  .site-footer {
+    padding-top: 48px;
+    padding-bottom: 56px;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 22px;
+  }
+  .links a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 0;
+  }
+  .links a:hover {
+    color: var(--accent-ink);
+  }
+</style>

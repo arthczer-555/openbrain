@@ -1,0 +1,109 @@
+---
+import { withBase } from "../../lib/paths";
+
+const points = [
+  {
+    title: "Notion stays the source",
+    text: "Your team keeps writing in Notion. OpenBrain keeps a read-only Markdown mirror of one page tree, nothing else.",
+  },
+  {
+    title: "Your private repo",
+    text: "The mirror, the routing registry and the tests live in your own private GitHub repository. Nothing goes upstream.",
+  },
+  {
+    title: "Tokens on your machine",
+    text: "Notion, Google Drive and GitHub tokens stay in your local .env, or you use your Claude MCP connectors. Netlify never sees them.",
+  },
+  {
+    title: "No third-party server",
+    text: "Your Netlify site and the LLM provider you choose. No OpenBrain cloud, no analytics, no telemetry.",
+  },
+  {
+    title: "No database",
+    text: "Flags, counters and settings sit in Netlify Blobs on your own site. Conversations nobody flagged are deleted after 24 hours.",
+  },
+  {
+    title: "A chatbot without access",
+    text: "The chatbot reads the compiled index only. It cannot reach your tools, and it never sends, creates or changes anything.",
+  },
+];
+---
+
+<section aria-labelledby="privacy-title" class="privacy wrap section">
+  <div class="privacy-head">
+    <span class="kicker">// your data stays yours</span>
+    <h2 id="privacy-title" class="h2">Your knowledge never leaves your accounts.</h2>
+    <p class="lead">
+      OpenBrain is code you run, not a service you sign up for. Questions and the passages used to answer them go to the
+      LLM provider you pick, and nowhere else.
+    </p>
+  </div>
+  <ul class="points">
+    {
+      points.map((point) => (
+        <li>
+          <h3>{point.title}</h3>
+          <p>{point.text}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="more"><a href={withBase("/docs/security/")}>Security and privacy, in detail</a></p>
+</section>
+
+<style>
+  .privacy-head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 820px;
+    margin-bottom: 36px;
+  }
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .points li {
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .points h3 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .points h3::before {
+    content: "$ ";
+    color: var(--accent-ink);
+  }
+  .points p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--body);
+  }
+  .more {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+  @media (max-width: 1000px) {
+    .points {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 600px) {
+    .points {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

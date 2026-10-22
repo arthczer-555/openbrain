@@ -1,0 +1,11 @@
+#!/bin/sh
+# OpenBrain pre-push guard: in an instance repo, refuse to push when `openbrain doctor` finds a
+# blocking problem (public repo holding the mirror, secrets in the base, auth "none", stale guide...).
+# Enable once per clone: git config core.hooksPath .githooks
+if [ ! -d knowledge ]; then
+  exit 0
+fi
+npm run -s openbrain -- doctor || {
+  echo "push refused by openbrain doctor (fix the FAIL lines above, or push with --no-verify if you know why)"
+  exit 1
+}

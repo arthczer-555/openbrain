@@ -1,0 +1,34 @@
+# Mapping of the fictional "Acme Tracker" MCP server onto the OpenBrain stream contract.
+# Declared in openbrain.config.yaml like this (the token stays in .env):
+#
+#   inputs:
+#     mcp:
+#       tracker:
+#         enabled: true
+#         transport: http
+#         url: "https://tracker.acme.example/mcp"
+#         auth_env: ACME_TRACKER_TOKEN
+#         mapping: ./connectors/tracker.mapping.yaml
+#
+# Only read tools may be mapped: a tool that looks like a write (create_issue, "Updates the issue...")
+# is refused before any call.
+
+kind: stream
+
+list:
+  tool: list_issues
+  # {{since}} and {{until}} are the collection window (ISO dates).
+  args: { updatedAfter: "{{since}}", limit: 50 }
+  items: "$.issues[*]"
+  paginate: { cursor_arg: after, next: "$.pageInfo.endCursor" }
+
+map:
+  id: "$.identifier"
+  title: "{{$.identifier}}: {{$.title}}"
+  url: "$.url"
+  modifiedAt: "$.updatedAt"
+  # Kept for triage only, never written to the knowledge base.
+  author: "$.assignee.name"
+  text: "{{$.description}}\n\nStatus: {{$.state.name}}\nLabels: {{$.labels[*].name}}"
+
+event_kind: ticket

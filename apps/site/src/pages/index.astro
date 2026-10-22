@@ -1,0 +1,33 @@
+---
+// Landing page ("direction B: Terminal", .design/Terminal.dc.html) + the blocks.
+import Landing from "../layouts/Landing.astro";
+import Header from "../components/landing/Header.astro";
+import Hero from "../components/landing/Hero.astro";
+import WeeklyTerminal from "../components/landing/WeeklyTerminal.astro";
+import HowItWorks from "../components/landing/HowItWorks.astro";
+import ChatDemo from "../components/landing/ChatDemo.astro";
+import Lean from "../components/landing/Lean.astro";
+import Config from "../components/landing/Config.astro";
+import DataStays from "../components/landing/DataStays.astro";
+import Quickstart from "../components/landing/Quickstart.astro";
+import CostEstimator from "../components/landing/CostEstimator.astro";
+import Faq from "../components/landing/Faq.astro";
+import Footer from "../components/landing/Footer.astro";
+---
+
+<Landing title="OpenBrain: an open source brain for your company">
+  <Header />
+  <main id="main">
+    <Hero />
+    <WeeklyTerminal />
+    <HowItWorks />
+    <ChatDemo />
+    <Lean />
+    <Config />
+    <DataStays />
+    <Quickstart />
+    <CostEstimator />
+    <Faq />
+  </main>
+  <Footer />
+</Landing>

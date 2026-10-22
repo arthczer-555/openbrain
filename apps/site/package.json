@@ -1,0 +1,16 @@
+{
+  "name": "@openbrain/site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenBrain landing page and documentation (Astro + Starlight, GitHub Pages).",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.6",
+    "astro": "^7.4.0"
+  }
+}

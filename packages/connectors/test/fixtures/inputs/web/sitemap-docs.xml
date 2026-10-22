@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://acme.example/docs/sso</loc><lastmod>2026-10-20T08:00:00+00:00</lastmod></url>
+  <url><loc>https://acme.example/docs/billing</loc><lastmod>2026-09-01</lastmod></url>
+  <url><loc>https://acme.example/docs/private/roadmap</loc><lastmod>2026-10-21</lastmod></url>
+  <url><loc>https://acme.example/docs/private/public-page</loc></url>
+  <url><loc>https://other.example/docs/elsewhere</loc><lastmod>2026-10-21</lastmod></url>
+  <url><loc>https://acme.example/careers</loc><lastmod>2026-10-21</lastmod></url>
+  <url><loc>https://acme.example/docs/sso#setup</loc><lastmod>2026-10-20</lastmod></url>
+</urlset>

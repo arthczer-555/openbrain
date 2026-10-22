@@ -1,0 +1,654 @@
+# Routing registry of the Acme brain.
+# Maintained by the weekly update (and by hand when needed), never generated: knowledge/ is a mirror of
+# Notion, this file says WHEN the agent should open each page. One entry per page holding knowledge, one per
+# section. No content here (no figures, no dates): the content lives in Notion.
+version: 1
+sections:
+  admin:
+    description: "Acme Console, the back-office where Acme staff set up client companies, groups, client users, SLA policies and SSO."
+    rules:
+      - 'A "user" here is a client end user (an agent of a client company), never a colleague: giving a colleague access is internal-tools/accounts.'
+      - When the question is about what can be chosen on a group, also open the company settings (parent level).
+      - "What a company can allow is itself capped by its plan: also open product/plans-and-features."
+      - "Setting up a new client: the runbook gives the order, the screen docs give the fields, sales/account-roles-and-handover gives who does what."
+  internal-tools:
+    description: "Acme Hub (pipeline, client health, reports) and Acme Billing (billing accounts, invoices, credit notes): access and daily use."
+    rules:
+      - A "user" or an "account" in Acme Hub is an Acme employee using the tool, never a client.
+      - 'In Acme Billing, a "billing account" is the billing record of a client company; a colleague with access is a "member".'
+      - Reports here are internal figures about Acme, never the reports clients see in Acme Desk.
+  legal-security:
+    description: "GDPR roles, DPAs, subprocessors, certifications, security rules for employees, security incidents, data subject requests."
+    rules:
+      - For an answer given to a client, these pages are the reference; sales/security-questionnaire gives the ready-made wording.
+      - "A security incident (data or access at risk) is handled here; an outage or a broken feature is support-ops."
+  people:
+    description: "HR policies for Acme employees, with no personal data: leave, remote work, expenses, travel, equipment, first week."
+    rules:
+      - If a topic is not documented here, say so and point to people/hr-contacts. Never answer HR questions from general knowledge.
+  product:
+    description: "How the client-facing helpdesk app works: plans, roles, channels, SLAs, inbox, reports, login, API, data retention and export."
+    rules:
+      - A "user" in this section is an agent or supervisor of a client working in Acme Desk, never an Acme employee.
+      - "The channels a client group can use are capped by the channels allowed for its company: also open admin/companies."
+      - "An SLA here is a target a client sets for its own customers, never the uptime commitment of Acme (support-ops/uptime-commitment)."
+  sales:
+    description: "Pricing, sales process, trials, proposals, renewals, who does what on an account, answers to security questionnaires."
+    rules:
+      - A price marked to_confirm must be presented as not confirmed yet.
+      - For data retention or security answers given to a client, product/data-retention is the reference page.
+      - 'An "account plan" is a sales document about a client; a "plan" alone is an Acme Desk subscription plan.'
+  support-ops:
+    description: "How Acme's own support team works: levels, escalation, on-call, incidents, uptime commitment, refunds and credits."
+    rules:
+      - These pages describe the support Acme gives its clients, not the helpdesk features of Acme Desk.
+      - "Support hours, response targets and the uptime commitment here are Acme's own, never the settings of a client group."
+docs:
+  # admin
+  admin/client-onboarding-runbook:
+    when_to_open: Set up a newly signed client from start to finish, in the right order, before its launch meeting.
+    aliases:
+      - onboard a new client
+      - setup a client
+      - client setup
+      - onboarding client
+      - mise en place client
+      - onboarding d'un nouveau client
+  admin/companies:
+    when_to_open: "Create or edit a client company in Acme Console, the first step when setting up a new client: plan, agent seats, allowed channels, holidays, company admins; apply an upgrade or downgrade; close it."
+    aliases:
+      - create a company
+      - new client company
+      - allowed channels
+      - company settings
+      - agent seats
+      - créer une entreprise
+      - canaux autorisés
+      - paramètres de l'entreprise
+  admin/groups:
+    when_to_open: Create a group of client users and choose its channels, business hours and SLA policy; why an option is not available on a group.
+    aliases:
+      - create a group
+      - group settings
+      - team
+      - créer un groupe
+      - équipe
+  admin/users:
+    when_to_open: Create, invite, import or deactivate client end users (agents and supervisors of a client company) in Acme Console. Not for giving a colleague access to Acme Hub.
+    aliases:
+      - add a user
+      - create user
+      - invite user
+      - import users CSV
+      - ajouter un utilisateur client
+    warnings:
+      - A user here is a client end user. To give a colleague access to the internal tool, open internal-tools/accounts.
+  admin/sla-policies:
+    when_to_open: "Create the SLA policies of a client company in Acme Console, apply one to a group and set its business hours; why another SLA policy cannot be added."
+    aliases:
+      - configure an SLA
+      - new SLA policy
+      - SLA setup
+      - group business hours
+      - configurer un SLA
+      - politique SLA
+      - horaires d'un groupe
+  admin/sso-setup:
+    when_to_open: Set up or troubleshoot single sign-on (SAML) for a client company on the Enterprise plan, and enforce it for its users.
+    aliases:
+      - SSO
+      - single sign-on
+      - SAML
+      - identity provider
+      - enforce SSO
+      - authentification unique
+      - connexion SSO
+  admin/support-access:
+    when_to_open: "Look at the Acme Desk workspace of a client as Acme support: how the client grants access, how staff open it, rules during the session."
+    aliases:
+      - support access
+      - open as support
+      - view a client workspace
+      - impersonate
+      - accès support
+      - voir l'espace d'un client
+  admin/client-offboarding:
+    when_to_open: "A client is leaving: the steps from its cancellation to closing its company, data export and final billing, and what happens to its tickets."
+    aliases:
+      - offboarding
+      - client leaving
+      - close a client
+      - départ d'un client
+      - offboarding client
+      - fin de contrat client
+
+  # internal-tools
+  internal-tools/hub-overview:
+    when_to_open: What Acme Hub is, which modules it has (pipeline, client health, reports) and how employees log in.
+    aliases:
+      - Acme Hub
+      - internal tool
+      - outil interne
+      - log in to the hub
+      - connexion
+  internal-tools/accounts:
+    when_to_open: "Give a colleague access to Acme Hub, the internal tool: create, change the role of or deactivate an employee account."
+    aliases:
+      - add a user in the internal tool
+      - new employee access
+      - colleague account
+      - ajouter un utilisateur dans l'outil interne
+      - donner accès à un collègue
+    warnings:
+      - "These are Acme Hub accounts only: access to Acme Billing is internal-tools/billing-overview."
+  internal-tools/hub-pipeline:
+    when_to_open: "Create or update a deal in the Acme Hub pipeline: fields, stages, weekly review, what happens when a deal is won or lost."
+    aliases:
+      - pipeline
+      - deal
+      - new deal
+      - opportunity
+      - next step
+      - pipe commercial
+      - opportunité
+  internal-tools/hub-client-health:
+    when_to_open: Read the client health score in Acme Hub, the signals behind it, and what customer success does when a client turns red.
+    aliases:
+      - client health
+      - health score
+      - red client
+      - churn risk
+      - santé client
+      - score de santé
+      - client à risque
+  internal-tools/hub-reports:
+    when_to_open: "The weekly internal report of Acme Hub: when it is sent, what it covers, who can see the Reports module, exports."
+    aliases:
+      - weekly report
+      - leadership report
+      - Hub reports
+      - internal reports
+      - rapport hebdomadaire
+      - reporting interne
+    warnings:
+      - "These are internal figures about the business of Acme; the reports clients see in Acme Desk are product/reports."
+    status: stale
+  internal-tools/billing-overview:
+    when_to_open: What Acme Billing is and its roles; give a colleague access to Acme Billing, change their role or remove the access.
+    aliases:
+      - Acme Billing
+      - billing tool
+      - Acme Billing access
+      - invite member
+      - finance tool
+      - outil de facturation
+      - accès à Acme Billing
+  internal-tools/billing-accounts:
+    when_to_open: "Create or edit the billing account of a client company in Acme Billing: legal entity, VAT, billing contact, cycle, payment method, status."
+    aliases:
+      - billing account
+      - new billing account
+      - VAT number
+      - billing contact
+      - payment method
+      - compte de facturation
+      - contact de facturation
+    warnings:
+      - "A billing account is the billing record of a client company, not the login of a colleague: access to Acme Billing is internal-tools/billing-overview."
+  internal-tools/billing-invoices:
+    when_to_open: When invoices are issued, payment terms, reminders for overdue invoices, sending an invoice again or correcting a wrong one in Acme Billing.
+    aliases:
+      - invoice
+      - resend invoice
+      - overdue invoice
+      - payment terms
+      - unpaid
+      - facture
+      - relance
+      - impayé
+  internal-tools/billing-credit-notes:
+    when_to_open: Issue a credit note in Acme Billing (service credit, billing error, commercial gesture), get it approved, and how the client gets the money.
+    aliases:
+      - credit note
+      - issue a credit
+      - cancel an invoice
+      - avoir
+      - créer un avoir
+  internal-tools/billing-plan-changes:
+    when_to_open: "Upgrade, downgrade or change the seats of a client: who agrees, what to change in Acme Billing and Acme Console, when it takes effect."
+    aliases:
+      - upgrade
+      - downgrade
+      - change plan
+      - add seats
+      - plan change
+      - changement de plan
+      - montée en gamme
+      - ajouter des sièges
+
+  # people
+  people/hr-contacts:
+    when_to_open: "Who to contact for an HR question that is not documented: payroll, leave, contracts, wellbeing."
+    aliases:
+      - HR contact
+      - who to ask
+      - ressources humaines
+      - à qui demander
+      - payroll question
+  people/remote-work:
+    when_to_open: The remote work rule for employees, who approves exceptions and what to do when working from abroad.
+    aliases:
+      - work from home
+      - remote
+      - télétravail
+      - politique de télétravail
+      - travail à distance
+  people/annual-leave:
+    when_to_open: How many days of paid leave employees get, how to request leave, carry-over of unused days, public holidays.
+    aliases:
+      - annual leave
+      - paid leave
+      - holiday request
+      - time off
+      - vacation
+      - congés payés
+      - jours de congés
+      - poser des congés
+  people/sick-leave:
+    when_to_open: "An employee is ill: who to tell, how to record the absence, when a medical certificate is needed, coming back to work."
+    aliases:
+      - sick leave
+      - illness
+      - medical certificate
+      - arrêt maladie
+      - malade
+      - certificat médical
+  people/expenses:
+    when_to_open: What an employee can claim as an expense, the limits, how and when to submit a claim and get reimbursed.
+    aliases:
+      - expense claim
+      - reimbursement
+      - receipt
+      - expense report
+      - note de frais
+      - frais professionnels
+  people/business-travel:
+    when_to_open: "Book a work trip: approval, train or plane, hotel limits, visiting a client."
+    aliases:
+      - business trip
+      - travel policy
+      - hotel
+      - train
+      - flight
+      - déplacement professionnel
+      - voyage d'affaires
+  people/first-week:
+    when_to_open: "Checklist for the first days of a new employee: laptop, accounts, access to tools, onboarding buddy, mandatory training."
+    aliases:
+      - new employee
+      - first day
+      - new joiner
+      - employee onboarding
+      - nouvel arrivant
+      - premier jour
+  people/equipment:
+    when_to_open: "Laptop and accessories for employees: what is provided, renewal, a lost or stolen laptop, returning equipment."
+    aliases:
+      - laptop
+      - computer
+      - screen
+      - lost laptop
+      - equipment
+      - ordinateur
+      - matériel informatique
+
+  # product
+  product/data-retention:
+    when_to_open: How long tickets, attachments and call transcripts are kept and when they are deleted, as implemented in the product.
+    aliases:
+      - retention
+      - data deletion
+      - durée de conservation
+      - suppression des données
+      - GDPR retention
+  product/overview-and-roles:
+    when_to_open: What Acme Desk is, which roles exist for a client (agent, supervisor, admin) and what each role can see or do.
+    aliases:
+      - roles
+      - permissions
+      - supervisor
+      - agent
+      - rôles
+      - droits
+  product/sla-and-business-hours:
+    when_to_open: How response and resolution targets are computed, how business hours, holidays and pending tickets pause the clock.
+    aliases:
+      - SLA
+      - response time
+      - business hours
+      - délai de réponse
+      - heures ouvrées
+    warnings:
+      - "These SLA policies are targets clients set for their own customers. The availability commitment of Acme to its clients is support-ops/uptime-commitment."
+  product/ticket-channels:
+    when_to_open: Which channels a ticket can come from (email, chat, phone) and why a channel is missing for a group.
+    aliases:
+      - email channel
+      - live chat
+      - phone channel
+      - canal
+      - canaux
+      - channel missing
+  product/plans-and-features:
+    when_to_open: Which plan a client needs for a feature (channels, SLA policies, reports, API, single sign-on) and what the plan caps for a company and its groups.
+    aliases:
+      - features per plan
+      - plan comparison
+      - which plan
+      - Starter
+      - Growth
+      - Enterprise
+      - fonctionnalités par plan
+      - comparatif des offres
+  product/ticket-statuses:
+    when_to_open: Inbox views and ticket statuses in Acme Desk, when a solved ticket closes automatically, what a reply to a closed ticket does.
+    aliases:
+      - ticket status
+      - inbox
+      - pending
+      - solved
+      - reopen a ticket
+      - statut du ticket
+      - boîte de réception
+  product/macros-and-automations:
+    when_to_open: Saved replies (macros), tags, automation rules and automatic assignment of tickets in Acme Desk.
+    aliases:
+      - macro
+      - saved reply
+      - tags
+      - automation rule
+      - round robin
+      - réponse enregistrée
+      - règle d'automatisation
+  product/reports:
+    when_to_open: "The reports clients see in Acme Desk: which ones exist, on which plans, who sees what, exports."
+    aliases:
+      - Acme Desk reports
+      - client reports
+      - SLA compliance report
+      - statistiques
+      - rapports Acme Desk
+    warnings:
+      - "These are the reports clients see in Acme Desk; the internal weekly figures of Acme are internal-tools/hub-reports."
+  product/login-and-security:
+    when_to_open: "How client users log in to Acme Desk: passwords, reset, two-factor authentication, SSO, sessions, blocked logins."
+    aliases:
+      - login
+      - password
+      - reset password
+      - two-factor authentication
+      - 2FA
+      - mot de passe
+      - double authentification
+  product/api-and-webhooks:
+    when_to_open: "Connect the tools of a client to Acme Desk: API keys, request limits, webhooks, developer documentation."
+    aliases:
+      - API
+      - API key
+      - webhook
+      - rate limit
+      - integration
+      - clé API
+      - intégration
+  product/data-export:
+    when_to_open: "A client wants its tickets out of Acme Desk: self-service CSV export, full export with attachments, what is not exported."
+    aliases:
+      - export
+      - export tickets
+      - CSV export
+      - full export
+      - exporter les données
+      - export des tickets
+
+  # sales
+  sales/account-roles-and-handover:
+    when_to_open: Who does what on a client account (account executive, customer success manager, support, finance) and how a newly signed client is handed over.
+    aliases:
+      - who does what
+      - handover
+      - account executive
+      - customer success
+      - qui fait quoi
+      - passation
+  sales/pricing:
+    when_to_open: What we charge for each Acme Desk plan, per agent seat, and what is included in each plan.
+    aliases:
+      - price
+      - prix
+      - tarif
+      - cost per seat
+      - plans
+      - prix par siège
+      - combien ça coûte
+    warnings:
+      - "The Enterprise price is not confirmed yet: always present it as to be confirmed."
+    status: to_confirm
+  sales/security-questionnaire:
+    when_to_open: "Answer a client security or GDPR questionnaire: hosting, encryption, authentication, retention, certifications, sub-processors."
+    aliases:
+      - security questionnaire
+      - GDPR questionnaire
+      - questionnaire sécurité
+      - hosting
+      - hébergement
+  sales/sales-process:
+    when_to_open: The stages of a deal from qualification to closed won or lost, what moves a deal forward, the weekly pipeline review.
+    aliases:
+      - sales process
+      - deal stages
+      - pipeline stages
+      - closed won
+      - processus de vente
+      - étapes de vente
+  sales/free-trial:
+    when_to_open: Offer, start, extend or convert a free trial of Acme Desk for a prospect.
+    aliases:
+      - free trial
+      - trial
+      - extend a trial
+      - essai gratuit
+      - période d'essai
+  sales/proposals-and-order-forms:
+    when_to_open: Write a proposal, get an order form signed, handle non-standard terms, or an amendment when the plan or seats change during an annual contract.
+    aliases:
+      - proposal
+      - order form
+      - contract
+      - amendment
+      - e-signature
+      - proposition commerciale
+      - bon de commande
+      - avenant
+  sales/account-plans:
+    when_to_open: "Write or review the account plan of a strategic client: which clients need one, what it contains, who writes it and when."
+    aliases:
+      - account plan
+      - strategic account
+      - key account
+      - plan de compte
+      - compte stratégique
+    warnings:
+      - "An account plan is a sales document about a client, not an Acme Desk subscription plan (product/plans-and-features)."
+  sales/renewals-and-cancellations:
+    when_to_open: Renewal of annual and monthly contracts, notice periods, price changes at renewal, what to do when a client cancels.
+    aliases:
+      - renewal
+      - cancellation
+      - notice period
+      - cancel a contract
+      - renouvellement
+      - résiliation
+      - préavis
+  sales/demo-workspace:
+    when_to_open: "Show Acme Desk to a prospect: the demo workspace, getting access to it, good practice during a demo."
+    aliases:
+      - demo
+      - Acme Demo
+      - demo account
+      - sandbox
+      - démo
+      - environnement de démo
+
+  # legal-security
+  legal-security/gdpr-overview:
+    when_to_open: The role of Acme under GDPR (processor or controller) for each kind of data, the principles applied, who answers privacy questions.
+    aliases:
+      - GDPR
+      - processor
+      - controller
+      - privacy
+      - RGPD
+      - sous-traitant
+      - responsable de traitement
+  legal-security/dpa-process:
+    when_to_open: "Sign a data processing agreement with a client: the standard DPA, a DPA sent by the client, where signed DPAs are kept."
+    aliases:
+      - DPA
+      - data processing agreement
+      - client DPA
+      - accord de traitement des données
+  legal-security/subprocessors:
+    when_to_open: Which subprocessors handle client data and where the data is, how clients get the list and are told about a new one.
+    aliases:
+      - subprocessors
+      - sub-processors
+      - subprocessor list
+      - sous-traitants ultérieurs
+      - liste des sous-traitants
+  legal-security/security-policy:
+    when_to_open: "Security rules every employee follows: two-factor authentication, passwords, devices, client data, training."
+    aliases:
+      - security policy
+      - password manager
+      - lock screen
+      - politique de sécurité
+      - sécurité informatique
+  legal-security/certifications:
+    when_to_open: Whether Acme holds a security certification (ISO), penetration tests, audit requests from clients.
+    aliases:
+      - ISO 27001
+      - certification
+      - certified
+      - penetration test
+      - pentest
+      - audit
+      - certifié
+  legal-security/ai-tools-policy:
+    when_to_open: Whether and how employees may use AI tools at work, and what must never be pasted into them.
+    aliases:
+      - AI policy
+      - AI chatbot
+      - generative AI
+      - AI assistant
+      - IA
+      - intelligence artificielle
+      - politique IA
+    status: to_confirm
+  legal-security/security-incidents:
+    when_to_open: "Something may have exposed data or access (lost laptop, phishing, data sent to the wrong person, breach): how to report it and what happens next."
+    aliases:
+      - security incident
+      - data breach
+      - data leak
+      - phishing
+      - incident de sécurité
+      - fuite de données
+      - violation de données
+  legal-security/data-subject-requests:
+    when_to_open: A person asks to access, correct or delete their personal data, whether a customer of a client or someone whose data Acme controls.
+    aliases:
+      - data subject request
+      - right to be forgotten
+      - delete personal data
+      - access request
+      - demande RGPD
+      - droit à l'oubli
+
+  # support-ops
+  support-ops/support-levels-and-escalation:
+    when_to_open: How the support team of Acme is organised in levels, when to escalate a client request, who stays the contact of the client.
+    aliases:
+      - escalation
+      - escalate
+      - level 1
+      - level 2
+      - product specialists
+      - escalade
+      - niveau de support
+  support-ops/on-call:
+    when_to_open: "The engineering on-call rota: when the on-call engineer is paged, how fast they respond, who can page."
+    aliases:
+      - on-call
+      - astreinte
+      - pager
+      - rota
+      - paging
+  support-ops/incident-severity:
+    when_to_open: Choose the severity of a service incident on Acme Desk, and what each severity means for paging and client updates.
+    aliases:
+      - severity
+      - P1
+      - P2
+      - critical incident
+      - sévérité
+      - priorité d'incident
+  support-ops/incident-communication:
+    when_to_open: "Inform clients during an outage or a broken feature: status page, emails, update frequency, post-mortem."
+    aliases:
+      - status page
+      - outage
+      - incident update
+      - post-mortem
+      - panne
+      - communication d'incident
+    warnings:
+      - "Service incidents only (outage, broken feature). A suspected data breach follows legal-security/security-incidents."
+  support-ops/uptime-commitment:
+    when_to_open: The availability commitment of Acme to its clients per plan, how it is measured, planned maintenance.
+    aliases:
+      - uptime
+      - availability
+      - uptime SLA
+      - maintenance window
+      - disponibilité
+      - engagement de disponibilité
+    warnings:
+      - "SLA here means the availability commitment of Acme to its clients, not the SLA policies a client sets in Acme Desk (product/sla-and-business-hours)."
+  support-ops/refunds-and-credits:
+    when_to_open: When a client gets a service credit, a commercial gesture or a refund, how much, and who approves it.
+    aliases:
+      - refund
+      - service credit
+      - commercial gesture
+      - money back
+      - remboursement client
+      - geste commercial
+  support-ops/support-hours:
+    when_to_open: When the support team of Acme answers clients, on which channels, and its first response targets per plan.
+    aliases:
+      - support hours
+      - opening hours of support
+      - support phone line
+      - horaires du support
+      - délai de réponse du support
+    warnings:
+      - "These are the hours of Acme support, not the business hours a client sets for its groups (admin/sla-policies)."
+  support-ops/bug-reports-and-feature-requests:
+    when_to_open: Report a bug to engineering or log a feature request from a client, and what to tell the client.
+    aliases:
+      - bug
+      - bug report
+      - feature request
+      - engineering tracker
+      - signaler un bug
+      - demande de fonctionnalité
