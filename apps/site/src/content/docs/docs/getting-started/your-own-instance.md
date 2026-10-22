@@ -126,8 +126,8 @@ any LLM, and the pre-push guard enabled by `/setup` runs `doctor` before every p
 ## 6. Every week: `/weekly`
 
 Open the repo in Claude Code and type `/weekly` (or `/hebdo`), or run `npm run openbrain -- weekly`, which opens Claude
-Code on it. See [Weekly update](/docs/concepts/weekly-update/). Between two updates, `/write` adds or fixes one piece
-of knowledge.
+Code on it. See [Weekly update](/docs/concepts/weekly-update/). Between two updates, `/write` adds whatever you ask:
+a fact, a document, or a whole topic gathered from your connected tools (codebase, product, sales, marketing...).
 
 ## Upgrade the engine
 

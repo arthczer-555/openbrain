@@ -1,8 +1,9 @@
+import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadInstanceConfig } from "@openbrain/core";
-import { formatRef, parseRef, specFromConfig, type ModelSpec, type NormalizedUsage } from "@openbrain/llm";
+import { apiKeyFor, createProviderRegistry, formatRef, parseRef, specFromConfig, type ModelSpec, type NormalizedUsage } from "@openbrain/llm";
 import { resolveSettings } from "@openbrain/server";
 import { stringFlag, type ParsedArgs } from "../args.ts";
 
@@ -23,14 +24,43 @@ export function builtUiDir(): string | null {
   return existsSync(path.join(dist, "index.html")) ? dist : null;
 }
 
+/** The model used to test in the terminal without any API key: Claude Code, on the operator's subscription. */
+export const SUBSCRIPTION_MODEL: ModelSpec = { ref: { provider: "claude-code", model: "sonnet" } };
+
+/** True when `claude` (Claude Code) answers on this machine. */
+export function claudeCodeAvailable(): boolean {
+  const result = spawnSync(process.env.OPENBRAIN_CLAUDE_BIN ?? "claude", ["--version"], { stdio: "ignore", timeout: 10_000 });
+  return result.status === 0;
+}
+
+export interface ChatSpecsOptions {
+  /** ask and eval: when no model of the chain has a key, answer through Claude Code (subscription) instead. */
+  subscriptionFallback?: boolean;
+}
+
 /** Chat model chain of an instance: `--model provider:model` wins over openbrain.config.yaml. */
-export async function chatSpecs(root: string, modelFlag: string | undefined): Promise<ModelSpec[]> {
+export async function chatSpecs(root: string, modelFlag: string | undefined, options: ChatSpecsOptions = {}): Promise<ModelSpec[]> {
   const settings = resolveSettings(await loadInstanceConfig(root), process.env);
   if (modelFlag) {
     const ref = parseRef(modelFlag);
     return [{ ref, effort: ref.model === settings.chat.model ? settings.chat.effort : "low" }];
   }
-  return [specFromConfig(settings.chat), ...settings.fallback.map(specFromConfig)];
+  const specs = [specFromConfig(settings.chat), ...settings.fallback.map(specFromConfig)];
+  if (!options.subscriptionFallback) return specs;
+  const registry = createProviderRegistry(settings.openaiCompatible);
+  const usable = specs.some((spec) => {
+    const def = registry.get(spec.ref.provider);
+    if (!def) return Boolean(spec.baseUrl);
+    return def.keyless === true || apiKeyFor(def, process.env, spec.apiKeyEnv) !== undefined;
+  });
+  if (usable || !claudeCodeAvailable()) return specs;
+  console.error(
+    dim(
+      `no API key for ${formatRef(specs[0]?.ref ?? SUBSCRIPTION_MODEL.ref)}: answering through Claude Code on your subscription (claude-code:sonnet).\n` +
+        "Add the key to .env to test the chat model itself.\n",
+    ),
+  );
+  return [SUBSCRIPTION_MODEL];
 }
 
 export function formatUsage(usage: NormalizedUsage): string {

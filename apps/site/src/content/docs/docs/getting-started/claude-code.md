@@ -44,7 +44,7 @@ They live in `.claude/skills/` and are available as soon as the repo is open in 
 | `/setup` | Once, about 15 minutes | Company and language, Notion (read-only integration, check, first mirror), input tools, chat model, registry and identity, tests, pre-push guard, deployment plan. It runs `openbrain init` itself. |
 | `/init` | Once, when your knowledge is spread over other tools | Fills Notion from your tools, by batches, with the duplicates and contradictions to settle first, then sync, registry and test questions. |
 | `/weekly` (alias `/hebdo`) | Every week | The [weekly update](/docs/concepts/weekly-update/). `--resume` continues an interrupted run. |
-| `/write` | Any time | Adds or fixes one piece of knowledge in Notion between two updates, with the same checks. |
+| `/write` | Any time | Adds knowledge on request, with the same checks: a fact, a document, or a whole topic gathered from your connected tools (codebase, product, sales, marketing...). |
 
 The CLI commands they call (`init`, `sync notion`, `collect`, `guide`, `weekly prepare`, `weekly finish`...) are listed
 in the [CLI reference](/docs/reference/cli/). You mainly run `search`, `ask`, `serve`, `eval`, `doctor`, `deploy` and

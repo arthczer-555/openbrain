@@ -20,7 +20,7 @@ async function openSession(args: ParsedArgs, json: boolean): Promise<Session> {
   const root = rootOf(args);
   const bundle = await buildBundle(root, { env: process.env });
   const settings = resolveSettings(await loadInstanceConfig(root), process.env);
-  const specs = await chatSpecs(root, stringFlag(args, "model"));
+  const specs = await chatSpecs(root, stringFlag(args, "model"), { subscriptionFallback: true });
   const llm = createLLMChain(specs, { env: process.env, registry: createProviderRegistry(settings.openaiCompatible), pricing: settings.pricing });
   const knowledge = knowledgeFromBundle(bundle, process.env);
   const modeFlag = stringFlag(args, "mode");

@@ -30,6 +30,7 @@ export const ENGINE_PATHS = [
   "vitest.config.ts",
   ".env.example",
   "CONTRIBUTING.md",
+  "REFERENCE.md",
   "SECURITY.md",
   "LICENSE",
 ];

@@ -146,8 +146,13 @@ class SingleModelLLM implements LLM {
     this.caps =
       spec.ref.provider === "demo"
         ? { ...guessedCapabilities("demo"), tools: true, verified: true }
-        : (entry?.caps ?? guessedCapabilities(spec.ref.provider));
-    this.price = spec.ref.provider === "demo" ? { input: 0, output: 0 } : resolvePrice(catalog, spec.ref, options.pricing);
+        : spec.ref.provider === "claude-code"
+          ? // No tools through `claude -p`: the agent switches to its retrieval-first mode.
+            { ...guessedCapabilities("claude-code"), tools: false, structuredOutput: true, contextWindow: 200_000, maxOutput: 32_000, verified: true }
+          : (entry?.caps ?? guessedCapabilities(spec.ref.provider));
+    // Demo and Claude Code cost nothing per call (Claude Code runs on the operator's subscription).
+    this.price =
+      spec.ref.provider === "demo" || spec.ref.provider === "claude-code" ? { input: 0, output: 0 } : resolvePrice(catalog, spec.ref, options.pricing);
   }
 
   private languageModel(): LanguageModel {

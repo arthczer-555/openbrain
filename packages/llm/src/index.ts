@@ -1,4 +1,5 @@
 export * from "./catalog.ts";
+export * from "./claude-code.ts";
 export * from "./demo.ts";
 export * from "./embeddings.ts";
 export * from "./llm.ts";

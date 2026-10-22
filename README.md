@@ -1,167 +1,148 @@
 # OpenBrain
 
-**Turn your company's Notion into a lean internal assistant that cites its sources and improves every week.**
+**An assistant for your team that answers from your Notion, shows where each answer comes from, and gets better
+every week.**
 
-Your team asks questions in plain language. OpenBrain finds the right passages in your company knowledge, answers
-with clickable citations to the original Notion pages, and says *"This is not documented yet"* instead of
-inventing. Every unanswered question is captured and fixed by the next weekly update.
+Your colleagues ask questions in plain words: *"How do I give a new hire access to the CRM?"*. OpenBrain finds the
+right Notion pages, answers with links to them, and says *"This is not documented yet"* instead of making something
+up. Every question it could not answer is kept, and fixed in Notion at the next weekly update.
 
-> **Status: early development (v0.1 in progress).** Everything on this page is implemented and tested locally;
-> runs against real LLM APIs and real Netlify deployments are still being validated. Items marked 🔜 are planned.
+Once your tools are connected, you can also **ask Claude to put anything you want in it**: how your codebase works,
+your product, your sales playbook, your marketing guidelines, your HR policies. Claude gathers it from your tools
+and writes it into Notion after your OK. [See examples](#ask-for-any-knowledge).
+
+> **Status: early version (v0.1).** Everything on this page works and is tested on the example company, including
+> real answers from Claude. A real deployment on Netlify is still being validated. Items marked 🔜 are planned.
 >
-> OpenBrain is a personal open source project by Arthur Czernichow, developed and tested on his own time
-> and accounts.
+> OpenBrain is a personal open source project by Arthur Czernichow, developed and tested on his own time and
+> accounts.
 
-## Contents
-
-- [How it works](#how-it-works)
-- [Try it in 2 minutes](#try-it-in-2-minutes)
-- [Set up your brain](#set-up-your-brain): 6 steps with Claude Code · [Upgrade the engine](#upgrade-the-engine)
-- [Connect your tools](#connect-your-tools): any MCP server or REST API, read-only
-- [Reference](#reference): files, registry, config, lint rules, CLI, Claude Code commands, environment
-- [Security and privacy](#security-and-privacy)
-- [Roadmap](#roadmap) · [Contributing](#contributing) · [License](#license)
+**Contents:** [How it works](#how-it-works) · [Try it](#try-it-in-2-minutes) · [What you need](#what-you-need) ·
+[Set up in 6 steps](#set-up-your-brain-in-6-steps) · [Connect your tools](#connect-your-tools) ·
+[Ask for any knowledge](#ask-for-any-knowledge) · [Costs](#what-it-costs) · [Privacy](#privacy-and-security) · [FAQ](#faq) · [Reference](REFERENCE.md)
 
 ## How it works
 
 ```
- Notion (source of truth)          your private repo                            your team
- ────────────────────────          ─────────────────                            ─────────
- Root page               sync      knowledge/           mirror, 1 file/page    deploy    chatbot on Netlify
- ├─ Section page  ───────────────▶ brain/registry.yaml  when to open a page  ─────────▶  cited answers
- │  └─ Pages                       brain/core.md        identity, rules                  "not documented yet"
- └─ Section page                   evals/golden.yaml    test questions                   gaps reported
-       ▲                                                                                       │
-       └────────────── weekly update: Claude proposes fixes, you approve ◀─────────────────────┘
+  Your tools                       Notion                           Your team
+  Slack, HubSpot, Claap,   ───▶    the one place where      ───▶    a chat page that answers
+  Google Drive, GitHub...          your company knowledge           from Notion only, with a
+                                   lives                            link to each source page
+        ▲                                                                   │
+        └──────  once a week, Claude proposes updates and you approve  ◀────┘
+                 (including the questions the chat could not answer)
 ```
 
-Three ideas make it different from "yet another RAG":
-
-1. **One source of truth.** Notion holds the knowledge. The repo keeps a read-only Markdown mirror of it
-   (`knowledge/`), so the chatbot never needs your Notion token and git keeps the history.
-2. **The agent guide is compiled, not hand-written.** Claude writes *when* each page should be opened
-   (`brain/registry.yaml`) and you approve it. The map the agent reads is generated from it, and the build
-   fails if the registry and Notion drift apart.
-3. **Lean by design.** A small fixed prompt (identity ≤ 1,200 tokens, section map ≤ 700 tokens), passages
-   instead of whole pages, and warnings that travel with the passage they apply to.
+1. **Notion is the source of truth.** The chat page only answers from your Notion pages. Your other tools feed
+   Notion, never the chat page directly.
+2. **Claude does the upkeep, you decide.** During the setup, once a week, and whenever you ask for a topic, Claude
+   reads your tools, proposes what to add or fix in Notion, and writes only after your OK. It runs in Claude Code,
+   on your Claude subscription.
+3. **Answers stay honest.** Each answer links to the pages it comes from. When nothing answers the question, the
+   assistant says so and notes the question for the next update.
 
 ## Try it in 2 minutes
 
-The repo ships with **Acme**, a fictional company full of real-world traps. No API key needed.
+No account and no key needed. The repo comes with **Acme**, a made-up company.
 
 ```bash
-git clone https://github.com/arthczer-555/openbrain.git openbrain && cd openbrain
-npm install                 # Node 24 or newer
-npm run demo                # open http://127.0.0.1:8787
+git clone https://github.com/arthczer-555/openbrain.git && cd openbrain
+npm install                  # needs Node 24 or newer (nodejs.org)
+npm run demo                 # then open http://127.0.0.1:8787
 ```
 
-The demo serves the Acme brain with a built-in demo model, so it runs without any LLM. Add `--llm` to use the
-model of the config instead (`npm run openbrain -- demo --llm`, with a provider key in `.env`).
-
-You can also query the knowledge directly, without any model:
+The demo answers by quoting the best passages, without any AI. To get real answers from Claude, through your
+Claude Code subscription and with nothing to configure:
 
 ```bash
-npm run -s openbrain -- search "How do I add a user in the internal tool?" --root examples/acme --k 1
+npm run openbrain -- ask "How do I add a user in the internal tool?" --root examples/acme
 ```
 
-```
-[1] 5.896  internal-tools/accounts  (Acme Hub accounts: give a colleague access > Add a colleague)
-    Only a Hub admin can add an account. Go to Settings then Team, click Add teammate and enter the colleague's work email. ...
-    warning: These are Acme Hub accounts only: access to Acme Billing is internal-tools/billing-overview.
-    source: https://www.notion.so/acme/Acme-Hub-accounts-give-a-colleague-access-0be3250b872e5be3c22165f4e4d34c4b
-
-section rules (internal-tools):
-  - A "user" or an "account" in Acme Hub is an Acme employee using the tool, never a client.
-  - In Acme Billing, a "billing account" is the billing record of a client company; a colleague with access is a "member".
-  - Reports here are internal figures about Acme, never the reports clients see in Acme Desk.
-```
-
-The question says *user*, and Acme also has a page about creating *client* users. The registry and the
-section rules route it to the right page anyway. That is what Claude builds for your company below.
-
-## Set up your brain
-
-Claude builds your brain and keeps it up to date: it consolidates your tools into Notion, writes the routing
-registry and the test questions, and runs the weekly update. You answer its questions and approve before
-anything is written. There is no manual path: a usable registry for a real company takes judgment on every
-page, and the weekly update needs Claude anyway.
-
-**Prerequisites**
-
-- Node 24 or newer.
-- [Claude Code](https://claude.com/claude-code) on a Claude subscription (the setup and the weekly update run
-  on it, with no API bill), with the **Notion connector** enabled: Claude writes approved changes into Notion
-  through it. The connectors of your other tools are optional, see [Connect your tools](#connect-your-tools).
-- A Notion workspace, a Netlify account, and an API key for the chat model (any provider).
-
-### 1. Create your private repo
-
-Create a **private** copy of this repository (GitHub *Use this template* → *Private*, or clone and push to a
-new private repo), then run `npm install`.
-
-> Keep it private. `knowledge/` contains a copy of your internal documentation. `/setup`, the CI and `deploy`
-> refuse to go further on a public repo.
-
-Your brain lives at the root of that repo:
+You play an Acme employee who wants to give a new colleague access to **Acme Hub**, Acme's (made-up) internal
+tool. The answer comes from Acme's knowledge base, with its source:
 
 ```
-openbrain.config.yaml     instance settings
-.env                      secrets, local only (never committed)
-knowledge/                Notion mirror, generated, never edited
-brain/core.md             the assistant's identity and golden rules (written by /setup)
-brain/registry.yaml       when to open each page, per-section rules (written by /setup and /init, kept up to date by /weekly)
-brain/catalog.md          generated
-brain/registry.json       generated
-connectors/               mappings of the MCP servers and REST APIs you read (optional)
-evals/golden.yaml         test questions (drafted by /init, completed by /weekly)
-state/                    sync and weekly update state (generated)
+To add a colleague to Acme Hub, you need to be a Hub admin, because only a Hub admin can add an account [1].
+1. Go to Settings, then Team [1].
+2. Click Add teammate and enter the colleague's work email [1].
+...
+  [1] Acme Hub accounts: give a colleague access > Add a colleague   https://www.notion.so/acme/...
 ```
 
-### 2. Run `/setup` (about 15 minutes)
+The question says *user*, and Acme also has a page about creating *client* users. The assistant still opens the
+page about colleagues, because a short routing guide tells it what "user" means in the internal tool. That guide is
+what Claude writes for your company during the setup.
 
-Open the repo in Claude Code (`claude`) and type `/setup`. Claude asks one question at a time and does the
-work:
+## What you need
 
-1. **Company**: name, language of your Notion, name and color of the assistant.
-2. **Notion**: you do three things yourself, Claude does the rest.
-   - Create an internal integration at [notion.so/profile/integrations](https://www.notion.so/profile/integrations)
-     with the capability *Read content* (the mirror is read-only).
-   - On your root page: `•••` → *Connections* → add the integration. Share **only** the root page.
-   - `cp .env.example .env` and set `NOTION_TOKEN` in it. Never paste a secret in the conversation.
+| What | Why | Cost |
+|---|---|---|
+| A computer with [Node 24 or newer](https://nodejs.org) | Runs the OpenBrain commands | Free |
+| [Claude Code](https://claude.com/claude-code), with a Claude plan that includes it | Claude does the setup, the tests and the weekly update | Included in your plan |
+| A Notion workspace, with the **Notion connector** turned on in Claude | Where your knowledge lives. Claude writes the changes you approve through it | Free plan works |
+| A personal GitHub account | Keeps your private copy and its history | Free |
+| A Netlify account | Hosts the chat page | Free plan works |
+| An API key from an AI provider (Anthropic, OpenAI, Google, Mistral...) | Only for the chat page once it is online | Billed per question, with a monthly cap you set |
 
-   Claude then checks the connection (it warns about any page shared outside the root tree) and mirrors the
-   tree into `knowledge/`.
-3. **Input tools** (Slack, Drive, GitHub, a CRM, websites, files, any MCP server or REST API): for each one,
-   Claude picks the simplest of the [three ways to connect it](#connect-your-tools), tests it read-only, and
-   writes its whitelist scope in the config.
-4. **Chat model**: any provider (Anthropic, OpenAI, Google, Mistral, OpenRouter, DeepSeek, Groq, xAI, or any
-   OpenAI-compatible endpoint such as Ollama or vLLM), with a fallback. Changeable later without redeploying.
-5. **Registry and identity**: Claude drafts `brain/registry.yaml` from your pages and `brain/core.md`, shows
-   them to you, and writes them after your go-ahead.
-6. **Guard and deploy plan**: pre-push guard, `doctor`, then the deployment plan (step 5).
+You don't need to know how to code. You will paste a few commands; Claude Code explains each step and does most of
+the work.
 
-If your Notion already holds your company knowledge, `/setup` is enough: go to step 4.
+## Set up your brain in 6 steps
 
-### 3. Run `/init` if your knowledge is spread across tools
+### Step 1. Make your own private copy (2 minutes)
 
-`/init` fills Notion from your other tools, once:
+```bash
+gh repo create my-brain --private --template arthczer-555/openbrain --clone && cd my-brain
+npm install
+```
 
-1. Inventory of the existing Notion tree and of every input tool, with the estimated volume and number of
-   batches.
-2. Clean-up: empty pages, templates, duplicates; sensitive items are flagged and never copied.
-3. Proposal: a tree of 5 to 12 sections, then page by page what will be created or updated and from which
-   sources. **Contradictions come first**: nothing is written until you settle them.
-4. Your approval, batch by batch, in the conversation.
-5. Writing into Notion, only under the root page, with a "Sources" block at the bottom of each page.
-6. Sync, registry, about 30 test questions drafted from the base plus your own, retrieval evals, commit and
-   push.
+Or on github.com: **Use this template** → **Create a new repository** → **Private**, then clone it. Check with
+`git remote -v` that it points to *your* repo: everything you publish later goes there.
 
-It works in batches and resumes where it stopped. What a good tree looks like, to review Claude's proposal:
+> **Keep it private.** It will hold a copy of your internal documentation. OpenBrain refuses to deploy from a
+> public repo.
+
+### Step 2. Run `/setup` in Claude Code (about 15 minutes)
+
+Open the folder in Claude Code (type `claude` in the terminal) and type `/setup`. Claude asks one question at a
+time and does the work:
+
+1. **Your company**: its name, the language of your Notion, the name and color of the assistant.
+2. **Notion**. You do three things yourself:
+   - Create an integration at [notion.so/profile/integrations](https://www.notion.so/profile/integrations), with
+     only the *Read content* permission.
+   - On the top page of your company knowledge: `•••` → **Connections** → add the integration. Share only that
+     page: everything under it is what the assistant will know.
+   - Run `cp .env.example .env` and paste the integration key after `NOTION_TOKEN=`. Never paste a key in the chat.
+
+   Claude then copies your pages into the repo and shows you how they are organized.
+3. **Your tools** (Slack, HubSpot, Claap, Google Drive...): Claude helps you connect each one and notes what it may
+   read, for example which Slack channels. See [Connect your tools](#connect-your-tools).
+4. **The AI of the chat page**: any provider, with a backup. You can change it later from the admin page.
+5. **The routing guide**: for each page, Claude writes when to use it and the words people use for it. You review
+   it, Claude saves it.
+
+### Step 3. Gather what is scattered: `/init` (30 to 90 minutes, once)
+
+Skip this step if your Notion already holds your company knowledge. Otherwise, type `/init`:
+
+1. Claude reads your tools, within the limits set in step 2, and tells you how much work it is.
+2. It proposes a structure for Notion (5 to 12 sections) and, page by page, what to create or update and from which
+   sources.
+3. **Contradictions come first.** When two tools say different things, you decide. Nothing is written before.
+4. You approve batch by batch. Claude writes into Notion, only under your top page, and adds a "Sources" block at
+   the bottom of each page.
+5. It drafts about 30 test questions from your pages. Add the questions your colleagues really ask.
+
+It works in batches and can stop and pick up where it left off.
+
+<details>
+<summary>What a good Notion structure looks like</summary>
 
 ```
-Company Brain                 ← root page
-├─ Product                    ← section (first-level child)
-│  ├─ Roles and permissions   ← page
+Company Brain                 ← the top page shared with the integration
+├─ Product                    ← a section
+│  ├─ Roles and permissions   ← a page
 │  └─ Data retention
 ├─ Sales
 │  └─ Pricing
@@ -169,406 +150,247 @@ Company Brain                 ← root page
    └─ Remote work
 ```
 
-- **5 to 12 sections**, split by audience or tool. A section page can be a simple list of links.
-- **One topic per page**, with H2 / H3 headings: each heading becomes a passage (about 500 tokens at most) that
-  the assistant can find and cite on its own.
-- **Facts written in the page.** Attachments (PDF, images) are not indexed.
-- **No contradictions.** The assistant cites, it does not arbitrate.
+- **5 to 12 sections**, by team or by tool. A section page can be a simple list of links.
+- **One topic per page**, with headings: the assistant finds and quotes each part on its own.
+- **Facts written in the page.** Attached files (PDF, images) are not read.
+- **No contradictions.** The assistant quotes your pages, it does not decide between them.
 
-### 4. Review and try
+</details>
 
-```bash
-npm run openbrain -- search "How long do we keep client data?"   # which passages come up, no model needed
-npm run openbrain -- ask "How long do we keep client data?"      # full answer (no question: a conversation)
-npm run openbrain -- serve                                       # the chatbot on http://127.0.0.1:8787
-```
+### Step 4. Test it in the terminal
 
-Ask the questions your colleagues really ask, in their words and in every language they use. When the wrong
-page comes first or an answer is off, tell Claude in the conversation (or type `/write`): the fix is usually in
-the registry (an alias, a sharper "when to open", a warning, a section rule) or in the Notion page itself.
-[What the registry holds](#brainregistryyaml) helps you review Claude's draft.
-
-Then measure:
+No API key needed: the answers come from Claude, through your subscription.
 
 ```bash
-npm run openbrain -- eval --no-llm                        # retrieval only, free: are the right pages found?
-npm run openbrain -- eval                                 # full answers: behavior, citations, language, tokens, cost, latency
-npm run openbrain -- eval --matrix anthropic:claude-opus-5-5,anthropic:claude-sonnet-5-5   # compare models
+npm run openbrain -- ask "How long do we keep client data?"      # one answer, with its sources
+npm run openbrain -- ask                                          # a conversation, follow-up questions work
+npm run openbrain -- search "How long do we keep client data?"   # which pages come up (instant, no AI)
+npm run openbrain -- eval                                         # runs all your test questions and gives a score
+npm run openbrain -- serve --model claude-code:sonnet             # the chat page on your computer: http://127.0.0.1:8787
 ```
 
-`eval` exits with an error under the thresholds (recall@k 90 %, correct abstention 100 %, answer language
-100 %) and saves each run in `.openbrain/evals/`. `--only <ids>` runs a subset, `--effort low|medium|high`
-compares reasoning efforts, and `--judge provider:model` adds an LLM judge for citation precision and grounding
-(thresholds 90 % and 95 %; pick a judge from another provider than the chat model).
+For each test question, `eval` checks that the right pages are cited, that the assistant says "not documented" when
+it should, and that it answers in the language of the question. `eval --no-llm` only checks which pages are found,
+in a second. Tip: `alias openbrain="npm run -s openbrain --"` shortens every command.
 
-**Optional: hybrid search.** Keyword search (BM25) is enough to start. To add semantic search, set
-`models.embeddings` in the config, for example `{ provider: voyage, model: voyage-4-lite, dimensions: 512 }`
-(OpenAI, Google, Mistral and OpenAI-compatible endpoints work too), and the matching key (`VOYAGE_API_KEY`...).
-The vectors are built with the chatbot bundle and fused with keyword results. Without a key, nothing changes.
+When an answer is wrong, tell Claude in the conversation, or type `/write`. The fix is usually a word to add to the
+routing guide, or a fact missing from Notion.
 
-### 5. Deploy the chatbot on Netlify
+Once the API key of the chat page is in `.env` (step 5), `ask` and `eval` test that AI instead. `--model
+claude-code:sonnet` goes back to your subscription.
+
+### Step 5. Put the chat page online (about 10 minutes)
+
+The online chat page cannot use your Claude subscription: add the API key of the AI chosen in step 2 to `.env`, for
+example `ANTHROPIC_API_KEY=...`. Then:
 
 ```bash
-npm run openbrain -- doctor          # before-production checklist, exits with an error on a blocking problem
-npm run openbrain -- deploy          # checks (lint, guide, auth, private repo, model key, Netlify CLI), then the plan
-npm run openbrain -- deploy --yes    # creates the site, sets the secrets, deploys
+npm run openbrain -- doctor           # final checklist: says what to fix, if anything
+npm i -g netlify-cli && netlify login
+npm run openbrain -- deploy           # shows what will happen
+npm run openbrain -- deploy --yes     # asks for the access code, creates the site on Netlify, puts it online
 ```
 
-`doctor` checks Node, that `.env` is not tracked by git, that the repo is private, that no secret pattern sits in
-`knowledge/` or `brain/`, that `brain/core.md` has no placeholder left, the sign-in mode, the spending cap, lint
-and guide, the chat model (capabilities, price, local key), whether that model passed your evals, and the date of
-the last weekly update.
+`deploy --yes` asks you to choose the **access code** your team will type to open the chat. Leave it empty and the
+chat opens directly, with no sign-in page: then anyone who has the link can read your knowledge through it, so keep
+that for small teams and a link you don't share outside. At the end you get the address of the chat page and the
+**admin code** for the admin page. The codes are shown once: save them.
 
-With `--yes`, `deploy` creates the Netlify site (`--site <name>` to choose it), generates and sets the secrets,
-runs the first deploy, writes `OPENBRAIN_URL` and `ADMIN_TOKEN` in your local `.env` for the weekly update, and
-prints the URL, the access code and the admin code **once**. Share the URL and the access code with your team.
+**One last click**, so that your weekly updates go online by themselves: in Netlify, **Project configuration** →
+**Build & deploy** → **Continuous deployment** → **Link repository** → GitHub → your private repo. Don't run
+`deploy --yes` again later: it creates new codes and signs everyone out.
 
-The chatbot streams its answers with clickable citations, has a knowledge browser (`/kb`) and an admin page
-(`/admin`: flagged questions, feedback, usage, model choice). Sign-in modes (`auth.mode`):
+Prefer to click through Netlify instead of the terminal? Follow [Deploy by hand](REFERENCE.md#deploy-by-hand).
 
-| Mode | For | Setup |
-|---|---|---|
-| `passcode` | Default, works on the free Netlify plan | One shared access code (`deploy` generates it; `auth hash-code` makes a new hash). |
-| `google` | Companies on Google Workspace | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ALLOWED_EMAIL_DOMAINS`, `ADMIN_EMAILS`. |
-| `netlify` | Sites already protected by Netlify | Set `OPENBRAIN_EDGE_GUARD=off`. |
+> Netlify's free plan deploys private repos from a **personal** GitHub account. A repo owned by a GitHub
+> organization needs a paid Netlify plan.
 
-The Netlify build never calls Notion: it compiles the committed mirror. The provided CI
-(`.github/workflows/ci.yml`) checks that the repo is private, that the guide is up to date and that the
-retrieval evals pass, without any LLM. The pre-push guard (`git config core.hooksPath .githooks`, enabled by
-`/setup`) runs `doctor` before every push.
+What your team gets: a chat page with sources, a page to browse the knowledge (`/kb`), and 👍 / 👎 on each answer.
+What you get: an admin page (`/admin`) with the unanswered questions, the feedback, the usage and the choice of AI.
+Sign-in is the shared access code you chose (or none); Google Workspace accounts work too ([details](REFERENCE.md#sign-in-admin-and-ci)).
 
-### 6. Every week: `/weekly`
+### Step 6. Every week: `/weekly` (15 to 30 minutes)
 
-Once a week, open the repo in Claude Code and type `/weekly` (or `/hebdo`), or run
-`npm run openbrain -- weekly`, which opens Claude Code on it.
+Open Claude Code in the folder and type `/weekly` (or `/hebdo`):
 
-1. The CLI prepares the week without any LLM: syncs Notion, collects what changed in your input tools, fetches
-   the questions the chatbot flagged, and writes a packet.
-2. Claude reads it, distills the durable facts, diagnoses each unanswered question and writes a short briefing.
-   Contradictions come first: nothing is written until you settle them.
-3. After your go-ahead, Claude writes into Notion, re-syncs the mirror, updates the registry and the test
-   questions, rebuilds the guide, re-tests, commits with the briefing as message and pushes. Netlify redeploys
-   in a minute or two.
+1. OpenBrain gathers the week: what changed in Notion and in your tools, the questions the chat page could not
+   answer, and the 👎.
+2. Claude writes a short briefing: what it proposes to add or fix in Notion, contradictions first.
+3. You approve. Claude writes into Notion, updates the routing guide and the test questions, checks everything and
+   publishes. The chat page is up to date one or two minutes later.
 
-It runs on your Claude subscription, with no API bill. Between two updates, `/write` adds or fixes one piece of
-knowledge, and `npm run openbrain -- reports` lists what the chatbot flagged. The provided
-`.github/workflows/reminder.yml` checks every Monday and opens an issue when the last update is more than 8 days
-old (or none was recorded).
-
-### Upgrade the engine
-
-```bash
-npm run openbrain -- upgrade --repo arthczer-555/openbrain           # dry run: lists what would change
-npm run openbrain -- upgrade --repo arthczer-555/openbrain --yes     # latest release; --version vX.Y.Z to pin
-```
-
-`upgrade` replaces only the engine files (a fixed allow-list). It never touches `knowledge/`, `brain/`,
-`evals/`, `state/`, `openbrain.config.yaml`, `.env` or `CLAUDE.md`. `--from <archive.tar.gz|folder>` upgrades
-from a downloaded release.
+Between two updates, ask for anything you want in the brain: see [Ask for any knowledge](#ask-for-any-knowledge). A GitHub reminder opens an issue when no update ran for
+more than 8 days.
 
 ## Connect your tools
 
-Notion is the only source the chatbot answers from. Every other tool is an **input**: Claude reads it during
-`/init` and `/weekly` and proposes what is worth keeping in Notion, for your approval. Inputs are always
-read-only, always limited to a whitelist (folders, channels, repos, URL prefixes...), and the chatbot never
-reads them. `/setup` asks which tools hold knowledge and picks the simplest way for each:
+OpenBrain only **reads** your tools, during `/init`, `/weekly` and when you [ask for a topic](#ask-for-any-knowledge),
+and only what you allow: which channels, which pipelines, which folders. The chat page never touches them. What is
+worth knowing ends up in Notion, after your OK.
 
-| Way | Best for | What you do | Declared in the config as |
-|---|---|---|---|
-| **1. A connector of Claude Code** | Any tool with a claude.ai connector or an MCP server: Slack, Google Drive, Gmail, HubSpot, Linear, Jira... | Connect it once in Claude Code. No token in the repo. | `inputs.claude.<name>`, with a scope |
-| **2. A built-in input** | Local files, websites, GitHub, Google Drive | A read-only token in `.env` (none for files and websites) | `inputs.files`, `web`, `github`, `gdrive` |
-| **3. A generic adapter** | Any other MCP server or REST API | A read-only key in `.env` and a YAML mapping, drafted by Claude | `inputs.mcp.<name>`, `inputs.api.<name>` |
+### The easy way: connect the tool to Claude
 
-Way 1 is the fastest to set up: Claude queries the tool itself during the update. Ways 2 and 3 are collected
-by the CLI (`collect`, run by `/weekly`): free, reproducible, and they don't use your Claude subscription,
-which matters for large tools (thousands of Drive files).
+Most work tools have an official connector for Claude (also called an MCP server). Connect it once, and Claude can
+read the tool during the updates. No key to create, no code.
 
-### Every connector
+**1. Connect it.** On claude.ai: **Customize** → **Connectors**
+([claude.ai/customize/connectors](https://claude.ai/customize/connectors)) → pick the tool → **Connect**, with the
+same account as Claude Code. It shows up in Claude Code by itself. On a Team or Enterprise plan, an owner turns the
+connector on first, then each person signs in.
 
-| Connector | Reads | Credential | Guide |
-|---|---|---|---|
-| `notion` (knowledge store, required) | The page tree under your root page, mirrored into `knowledge/` | `NOTION_TOKEN` (integration with *Read content*); approved writes go through the Notion connector of Claude Code | [Step 2](#2-run-setup-about-15-minutes) |
-| `claude:<name>` | What the Claude Code connector exposes, within the scope you write | Your own sign-in in the tool | [Below](#connect-a-tool-to-claude-code) |
-| `files` | Folders on your machine: `.md`, `.txt`, `.csv`, `.html`, `.json`, `.docx`, `.pptx` (exports of Confluence, SharePoint, Drive...) | None | [files](packages/connectors/src/files/SETUP.md) |
-| `web` | Public pages of a site, help center or docs, from a sitemap or a list of URLs; `robots.txt` respected | None | [web](packages/connectors/src/web/SETUP.md) |
-| `github` | Docs (`README.md`, `docs/**/*.md`), commits and merged pull requests of the listed repos | `GITHUB_TOKEN`, fine-grained, read-only | [github](packages/connectors/src/github/SETUP.md) |
-| `gdrive` | Google Docs, Sheets, Slides and uploaded Office files of shared folders, shared drives included | `GDRIVE_SA_JSON`, service account, `drive.readonly` | [gdrive](packages/connectors/src/gdrive/SETUP.md) |
-| `mcp:<name>` | Any MCP server (local stdio or remote Streamable HTTP), through its read tools only | The server's key, if any | [mcp](packages/connectors/src/mcp/SETUP.md) |
-| `api:<name>` | Any REST API that answers JSON, `GET` requests only | An API key: bearer, custom header, basic or query parameter | [api](packages/connectors/src/api/SETUP.md) |
+Not in the list? Add it from the terminal with its address from the table below, then type `/mcp` in Claude Code
+and sign in:
 
-### Connect a tool to Claude Code
+```bash
+claude mcp add --transport http claap https://api.claap.io/mcp
+```
 
-- **claude.ai connectors** (Slack, Google Drive, Gmail, Google Calendar, HubSpot, Linear, Notion...): enable
-  them on claude.ai under *Settings* → *Connectors*, with the account you use in Claude Code. Claude Code sees
-  them right away.
-- **Any other MCP server**: add it from the repo folder, then sign in with `/mcp` inside Claude Code.
-
-  ```bash
-  claude mcp add --transport http tracker https://tracker.acme.example/mcp   # remote server
-  claude mcp add wiki -- npx -y @acme/wiki-mcp                               # local server (stdio)
-  ```
-
-Then declare the tool with its scope: `/weekly` reads it on the week's window, and only within that scope.
+**2. Tell OpenBrain what to read**, in `openbrain.config.yaml` (`/setup` writes it with you):
 
 ```yaml
 inputs:
   claude:
-    slack: { scope: "channels #product, #sales and #announcements, threads included" }
-    crm: { connector: hubspot, scope: "deals that changed stage, notes on won and lost deals" }
+    slack:   { scope: "channels #product, #sales and #announcements, threads included" }
+    hubspot: { scope: "deals that changed stage, and notes on won or lost deals" }
+    claap:   { scope: "customer call recordings: summaries and decisions only" }
 ```
 
-`connector` is the name of the connector in Claude Code, when it differs from the input name. Claude never
-writes through an input: only the Notion connector writes, after your go-ahead.
+**3. Check:** `npm run openbrain -- connectors list` shows them as *via Claude*.
 
-### Connect any MCP server or REST API to the CLI
+**Popular tools** (checked on October 22, 2026). "claude.ai" means the tool is in claude.ai's connector list:
+connect it there, it is the simplest. Use the address only if it is not.
 
-For a collection that is reproducible and does not use your Claude subscription:
-
-```yaml
-inputs:
-  mcp:
-    tracker:
-      transport: http                               # or stdio, with command and args
-      url: "https://tracker.acme.example/mcp"
-      auth_env: ACME_TRACKER_TOKEN                  # the key itself stays in .env
-      mapping: ./connectors/tracker.mapping.yaml
-  api:
-    crm:
-      base_url: "https://api.crm.acme.example/v2"
-      auth: { type: bearer, env: ACME_CRM_TOKEN }   # or header, basic, query
-      mapping: ./connectors/crm.mapping.yaml
-```
-
-The mapping says which tool or endpoint lists the items, where they are in the response, how to paginate,
-and which fields become the title, date, link and text ([MCP example](examples/acme/connectors/tracker.mapping.yaml),
-[REST example](examples/acme/connectors/crm.mapping.yaml)). You don't write it by hand: in `/setup`, Claude
-lists the server's tools or reads the API reference, calls one read endpoint with your key and drafts the
-mapping for your approval. Both adapters are read-only in code: the MCP adapter refuses any tool that looks
-like a write, the REST adapter only sends `GET` requests, and only to the host of `base_url`.
-
-```bash
-npm run openbrain -- connectors list          # every connector, its status and missing credentials
-npm run openbrain -- connectors test <id>     # read-only health check: identity, scopes, 3 samples
-npm run openbrain -- collect --dry-run        # what the weekly update would read, without writing anything
-```
-
-### Which way for which tool
-
-| Tool | Simplest | Free and reproducible |
-|---|---|---|
-| Slack | Claude connector | `mcp` with a Slack MCP server |
-| Google Drive | Claude connector | `gdrive` |
-| GitHub | `github` | `github` |
-| Website, help center, public docs | `web` | `web` |
-| Confluence, SharePoint, Notion exports | Export to a folder, then `files` | `api` (Confluence REST, basic auth) |
-| CRM (HubSpot, Salesforce, Pipedrive...) | Claude connector | `api` |
-| Tickets and projects (Linear, Jira, Zendesk, Intercom...) | Claude connector | `mcp` or `api` |
-| Meeting notes, calls (Gong, Fireflies...) | Claude connector, if the tool has one | `api` |
-| An internal tool | `mcp` or `api` | `mcp` or `api` |
-
-## Reference
-
-### Mirror page header
-
-Generated by `sync notion`. Strict: unknown keys are rejected.
-
-| Key | Required | Meaning |
-|---|---|---|
-| `id` | yes | Path inside `knowledge/` without `.md`, e.g. `product/data-retention`. Used in citations and in the registry. |
-| `title` | yes | Notion page title. |
-| `section` | yes | Folder name, i.e. the first-level page it belongs to. |
-| `source.connector` | yes | `notion`. |
-| `source.page_id` | yes | Notion page id. |
-| `source.url` | yes | Link to the Notion page, used for citations. |
-| `updated_at` | yes | Notion last edited time (ISO date or date-time). |
-| `lang` | no | Language of the page (`en`, `fr`...). |
-
-Files and folders starting with `_` or `.` are ignored.
-
-### `brain/registry.yaml`
-
-| Key | Required | Default | Meaning |
+| Tool | Easiest way | Address for `claude mcp add` | Good to know |
 |---|---|---|---|
-| `version` | no | `1` | Format version. |
-| `sections.<id>.description` | yes | | One line, shown in the section map of every prompt. |
-| `sections.<id>.rules` | no | `[]` | Routing rules, sent with results from this section. |
-| `docs.<page id>.when_to_open` | yes | | When to open the page (≤ 220 characters, no dates). |
-| `docs.<page id>.aliases` | no | `[]` | Extra search terms. |
-| `docs.<page id>.warnings` | no | `[]` | Binding notes returned with the page's passages. |
-| `docs.<page id>.status` | no | `validated` | `validated`, `to_confirm` or `stale`. |
+| **Slack** | claude.ai | (use claude.ai) | A Slack admin may have to approve it. |
+| **HubSpot** | claude.ai | `https://mcp.hubspot.com/anthropic` | |
+| **Claap** | Address | `https://api.claap.io/mcp` | Sign in with Claap in the browser. Depends on your Claap plan. |
+| **Google Drive, Gmail, Google Calendar** | claude.ai | (use claude.ai) | The direct addresses need a Google Cloud project. |
+| **Microsoft 365** (SharePoint, OneDrive, Outlook, Teams) | claude.ai | (use claude.ai) | Read-only by default. A Microsoft admin approves it once. |
+| **Linear** | claude.ai | `https://mcp.linear.app/mcp/readonly` | This address can only read: the best choice for OpenBrain. |
+| **Jira, Confluence** | claude.ai ("Atlassian") | `https://mcp.atlassian.com/v2/mcp` | Atlassian Cloud only. |
+| **Asana** | claude.ai | (use claude.ai) | |
+| **monday.com** | claude.ai | `https://mcp.monday.com/mcp` | |
+| **ClickUp** | claude.ai | `https://mcp.clickup.com/mcp` | |
+| **Intercom** | claude.ai | `https://mcp.intercom.com/mcp` | European workspaces: `https://mcp.eu.intercom.com/mcp`. |
+| **Fireflies** | claude.ai | `https://api.fireflies.ai/mcp` | |
+| **Granola** | claude.ai | `https://mcp.granola.ai/mcp` | The free plan only shows the last 30 days. |
+| **Gong** | Address | `https://mcp.gong.io/mcp` | Read-only. A Gong admin creates the integration first. |
+| **Pipedrive** | claude.ai | `https://mcp.pipedrive.ai/mcp` | Paid Pipedrive plans. |
+| **Attio** | claude.ai | `https://mcp.attio.com/mcp` | |
+| **Airtable** | claude.ai | `https://mcp.airtable.com/mcp` | |
+| **Pennylane** | Address | `https://mcp.pennylane.com/mcp` | Read-only. |
+| **GitHub** | OpenBrain's GitHub reader (below) | `https://api.githubcopilot.com/mcp/readonly` | claude.ai's GitHub integration does not reach Claude Code. |
 
-```yaml
-version: 1
-sections:
-  product:
-    description: "How the client-facing app works: roles, ticket channels, SLAs, data retention."
-    rules:
-      - A "user" in this section is a client's agent, never one of our employees.
-docs:
-  product/data-retention:
-    when_to_open: "How long client data is kept, how it is deleted, and what to tell a client who asks."
-    aliases: ["retention", "data deletion", "GDPR", "conservation des données"]
-    warnings:
-      - Security questionnaires quote this page: always answer from it, not from memory.
-```
+Many other tools have one (Stripe, Zendesk, Salesforce, Dropbox, Box, Notion...): search claude.ai's list, or the
+tool's help center for "MCP".
 
-What to check when you review Claude's draft:
+> **Claude only reads during the updates.** The OpenBrain commands forbid it to write anywhere except in Notion,
+> after your OK. Most connectors could also write, though: when a tool offers a read-only address (Linear, GitHub
+> above), prefer it. To block writing completely, see [Read-only connectors](REFERENCE.md#read-only-connectors).
 
-- `when_to_open` says **when** to open the page (the situation, the question), never what it contains: no
-  figures, no dates, they would go stale silently. Look-alike pages say what they are *not* for.
-- `aliases` are the words your colleagues actually type, including jargon and other languages.
-- `warnings` cover false friends and scope (*"a user here is a client, not a colleague"*); the assistant must
-  apply them.
-- `to_confirm` makes the assistant say an answer is not confirmed yet; `stale` asks a human to review the page.
+> **A connector doesn't show up in Claude Code?** Type `/status`. If Claude Code uses an API key
+> (`ANTHROPIC_API_KEY` set in your terminal), claude.ai connectors are not loaded: remove the variable and restart
+> Claude Code. OpenBrain only reads the keys of its `.env` file, which Claude Code ignores.
 
-### `openbrain.config.yaml`
+### No connector? Other ways
 
-| Key | Meaning |
-|---|---|
-| `instance.name`, `instance.kb_language` | Company name, language your Notion is written in. |
-| `notion.root_page` | Id of the root page. Only this tree is read. |
-| `chatbot.assistant_name`, `accent`, `logo` | Name and look of the chatbot. |
-| `chatbot.mode` | `auto` (default), `agent`, or `retrieval_first` for models without tool calling. |
-| `auth.mode` | `passcode`, `google` or `netlify`. |
-| `auth.allowed_domains` | `google` mode: email domains allowed to sign in. |
-| `auth.identified` | `true`: flagged questions keep the user's email instead of a hash. |
-| `budgets.monthly_usd` | Monthly spending cap of the chat (estimate). |
-| `budgets.questions_per_user_per_day` | Per-user daily quota. |
-| `models.chat` | `provider`, `model`, optional `effort` (`low`, `medium`, `high`), `base_url`, `api_key_env` (when the key is not in the provider's default variable), `max_output_tokens`. |
-| `models.fallback` | Models with the same shape, tried in order when the chat model fails. |
-| `models.embeddings` | Optional hybrid search: `{ provider, model, dimensions }`, plus `base_url` and `api_key_env` if needed (Voyage, OpenAI, Google, Mistral, OpenAI-compatible). |
-| `user_choice.enabled`, `user_choice.allowed` | Let users pick a model in the chat, among `"provider:model"` entries. |
-| `providers.openai_compatible` | Extra endpoints: `{ name, base_url, api_key_env }`. |
-| `weekly.publish` | `push` (default) or `pr`: how `/weekly` publishes the approved update. |
-| `inputs` | Tools read by `/init` and `/weekly`: `claude`, `files`, `web`, `github`, `gdrive`, `mcp`, `api`. See [Connect your tools](#connect-your-tools). |
-| `pricing` | `"provider/model": { input_per_mtok, output_per_mtok, cache_read_per_mtok, cache_write_per_mtok }` to override the built-in price table. |
-
-Unknown top-level and section keys are kept, so the file can grow with new features. Model entries
-(`models.chat`, `models.fallback`), `pricing` and `providers.openai_compatible` entries are strict: a typo there
-fails with a clear message.
-
-### Lint rules
-
-`openbrain lint` exits with an error code when there is at least one error. Warnings never block. Claude
-fixes these during `/setup`, `/init` and `/weekly`; the table helps you read the output.
-
-| Rule | Level | Fix |
+| You have | Use | How |
 |---|---|---|
-| `invalid-file` | error | Fix the page header, or re-run `sync notion`. |
-| `missing-registry` / `invalid-registry` | error | Create `brain/registry.yaml` or fix its YAML. |
-| `missing-registry-entry` | error | Add a `docs.<page id>` entry with a `when_to_open`. |
-| `missing-section-entry` | error | Add a `sections.<id>` entry with a `description`. |
-| `orphan-registry-entry` / `orphan-section-entry` | error | The page or section was renamed, moved or deleted in Notion: update or remove the entry. |
-| `id-matches-path` / `section-matches-folder` | error | `id` must equal the file path, `section` the folder. |
-| `when-to-open-length` | error | Shorten to 220 characters: say when to open, not what is inside. |
-| `when-to-open-date` | error | Remove the date, it belongs in the page. |
-| `when-to-open-number` | warning | Remove the figure unless it is part of a name (ISO 27001). |
-| `broken-link` | error | An internal link points to a missing `.md` file. |
-| `duplicate-title` | warning | Two pages share a title: make their `when_to_open` tell them apart. |
-| `missing-section-index` | warning | The section page is missing from the mirror: re-run `sync notion`. |
-| `empty-page` | warning | Fill or delete the page in Notion. |
+| Files: exports from Confluence, SharePoint, Google Drive, meeting notes | A folder on your computer | [files](packages/connectors/src/files/SETUP.md), no key |
+| A public website, help center or documentation | The website reader | [web](packages/connectors/src/web/SETUP.md), no key |
+| Documentation and changes in GitHub | The GitHub reader | [github](packages/connectors/src/github/SETUP.md), a read-only key |
+| Thousands of Google Drive files | The Drive reader | [gdrive](packages/connectors/src/gdrive/SETUP.md), a read-only service account |
+| Any other tool with an API or an MCP server | A short description file that Claude writes with you in `/setup` | [api](packages/connectors/src/api/SETUP.md), [mcp](packages/connectors/src/mcp/SETUP.md) |
 
-### CLI
+These readers run on your computer and don't use your Claude subscription, which helps with large volumes. They
+can only read: the code refuses anything that would create, change or delete. All the details:
+[Connectors](REFERENCE.md#connectors).
 
-Claude drives most of these during `/setup`, `/init` and `/weekly`. You mainly use `search`, `ask`, `serve`,
-`eval`, `doctor`, `deploy` and `reports`.
+## Ask for any knowledge
 
-Run `npm run openbrain -- <command>`. Tip: `alias openbrain="npm run -s openbrain --"`.
-Every command except `demo` accepts `--root <path>` (instance folder, default: current folder) and most accept
-`--json`.
+Once your tools are connected, ask Claude to put whatever you want in your brain, in your own words. Open Claude
+Code in the folder and type `/write` followed by your request, or simply ask (*"add this to the brain"*).
 
-| Command | What it does |
+| Topic | What you can ask |
 |---|---|
-| `init` | Creates the instance files without overwriting any (run by `/setup`). |
-| `sync notion` | Mirrors the Notion tree into `knowledge/` (read-only). `--root-page <id>`, `--dry-run`, `--full`. |
-| `lint` | Checks the mirror and the registry. |
-| `guide build` / `guide check` | Generates `brain/catalog.md` and `brain/registry.json` and checks the budgets / fails if they are out of date. |
-| `index` | Builds the passage index into `.openbrain/index.json`. |
-| `search "<question>"` | Searches without any LLM. `--section <id>`, `--k <n>` (default 6, max 10), `--full`. |
-| `ask ["<question>"]` | Answers in the terminal; without a question, a conversation. `--model provider:model`, `--mode agent\|retrieval_first`. |
-| `serve` | Runs the chatbot of the instance locally (API + UI). `--port`, `--model`, `--with-auth` (open locally otherwise). |
-| `demo` | The Acme brain with a demo model, no key needed. `--llm` to use the configured model. |
-| `eval` | Scores `evals/golden.yaml`. `--no-llm`, `--model`, `--matrix a,b`, `--judge provider:model`, `--effort <level>`, `--only <ids>`, `--k <n>`. |
-| `models list` / `models refresh` | Models your keys can use, with capabilities and prices (`--all` for every model) / refreshes the price table. |
-| `doctor` | Before-production checklist; exits with an error on a blocking problem. |
-| `deploy` | Plan of the Netlify deployment; `--yes` to deploy, `--site <name>`. |
-| `bundle` | Builds the runtime bundle of the chatbot (run by the Netlify build). |
-| `reports` / `reports mark done <ids>` | Questions flagged by the deployed chatbot, re-tested on the local mirror / marks them as handled. |
-| `auth hash-code [<code>]` | Hashes an access code for `ACCESS_CODE_HASH` / `ADMIN_CODE_HASH`. |
-| `connectors list` / `connectors test <id>` | Lists Notion and the input tools / read-only health check. |
-| `collect` | Collects the enabled input tools into `.openbrain/weekly/<date>/inputs/`. `--since`, `--until`, `--only`, `--out`, `--full`, `--dry-run`. |
-| `weekly` / `weekly prepare` / `weekly finish` | Opens Claude Code on `/weekly` / prepares the week's packet / finishes after the go-ahead. |
-| `upgrade` | Updates the engine files from a release, never the instance files. `--repo <owner>/<repo>`, `--version`, `--from`, `--yes`. |
+| **Codebase and tech** | *"Document how our codebase is organized, from the GitHub repo: architecture, main services, how to run and deploy it."* |
+| **Product** | *"Write one page per feature we shipped this quarter, from Linear and the release notes."* |
+| **Sales** | *"Build a sales playbook from HubSpot and our Claap call recordings: objections, pricing questions, competitors."* |
+| **Marketing** | *"Gather our marketing guidelines from Google Drive and Slack #marketing: tone of voice, personas, current campaigns."* |
+| **Customer support** | *"Turn the most frequent Intercom questions of the last three months into answers, one page per topic."* |
+| **People and operations** | *"Put our HR policies from the Drive folder 'People' into Notion: leave, remote work, expenses."* |
+| **A single fact** | *"Our support hours change to 8am to 7pm from November 1st."* |
 
-### Claude Code commands
+Then Claude:
 
-Defined in [`.claude/skills/`](.claude/skills/), available when the repo is open in Claude Code.
+1. reads the tools you named, only what you allowed, and the code itself when the repo is on your computer;
+2. proposes the pages to create or update in Notion, with their sources, contradictions first;
+3. writes after your OK, updates the routing guide and the test questions, and publishes.
 
-| Command | What it does |
-|---|---|
-| `/setup` | Configures the instance step by step, up to the deployment. |
-| `/init` | First consolidation of your tools into Notion, then sync and registry. |
-| `/weekly` (alias `/hebdo`) | The weekly update, with your go-ahead before anything is written. `--resume` continues an interrupted run. |
-| `/write` | Adds or fixes one piece of knowledge in Notion between two updates. |
+A minute or two later, your team can ask the chat page about it. Nothing is written in Notion without your OK, and
+nothing is ever written in your tools.
 
-### Environment
+## What it costs
 
-Copy `.env.example` to `.env` and fill only what you use. The CLI loads `.env` from the instance folder and the
-current folder; variables already set in your terminal win.
+- **Setup, tests and weekly updates**: included in your Claude plan, no API bill.
+- **Notion, GitHub and Netlify**: their free plans are enough to start.
+- **The chat page online**: your AI provider charges per question. OpenBrain keeps each question small (about
+  3,000 tokens of context on the example company, a few pages of text), and you set a monthly cap
+  (`budgets.monthly_usd`). Above it, the chat page says the budget is reached.
 
-| Variable | Where | Used for |
-|---|---|---|
-| `NOTION_TOKEN` | your machine only | Notion sync, `/init`, weekly update. |
-| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `MISTRAL_API_KEY`, `OPENROUTER_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY`, `XAI_API_KEY` | Netlify and your machine | The chat model (at least one). |
-| `SESSION_SECRET`, `ACCESS_CODE_HASH`, `ADMIN_CODE_HASH` | Netlify | Sign-in and admin. `deploy` generates them. |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ALLOWED_EMAIL_DOMAINS`, `ADMIN_EMAILS` | Netlify | `google` sign-in. |
-| `OPENBRAIN_ROOT` | Netlify | Instance folder when it is not the repo root. |
-| `OPENBRAIN_EDGE_GUARD` | Netlify | `off` when Netlify itself protects the site. |
-| `OPENBRAIN_URL` | your machine only | Weekly update and `reports`. `deploy` writes it. |
-| `ADMIN_TOKEN` | Netlify and your machine | Lets the weekly update and `reports` fetch the flagged questions. `deploy` sets it on both sides. |
-| `OPENBRAIN_UPSTREAM_REPO` | your machine only | Default `<owner>/<repo>` of `upgrade`. |
-| `GDRIVE_SA_JSON`, `GITHUB_TOKEN`, and the keys named in `inputs.mcp` / `inputs.api` | your machine only | Input tools collected by the CLI (a connector of Claude Code needs none). |
-| `VOYAGE_API_KEY` (or the key of your embeddings provider) | Netlify | Optional hybrid search. |
+## Privacy and security
 
-## Security and privacy
+- **Your copy stays private.** It holds your documentation: OpenBrain checks that the repo is private before every
+  deployment.
+- **Keys stay on your computer.** The keys of Notion and of your tools never go to Netlify. The chat page only
+  reads the copy of your Notion pages, so a problem on the hosting side exposes neither Notion nor your tools.
+- **Read only.** The assistant never sends, creates or changes anything outside the chat. Notion only changes
+  during `/init`, `/weekly` or `/write`, after your OK.
+- **Sensitive content is flagged.** Passwords, keys and personal data found in your tools are reported and never
+  copied into Notion.
+- **Access codes are stored as fingerprints only**, and shown once.
 
-- Your instance repo must stay **private**: it contains a copy of your knowledge. The CI and `deploy` check it.
-- Tool tokens (Notion, Drive, GitHub...) never leave your machine. The chatbot only reads the compiled mirror,
-  so a leak on the hosting side exposes neither Notion nor your tools.
-- Access codes are stored as hashes only, and `deploy` shows the codes once.
-- The assistant is read-only: it never sends, creates or changes anything outside the chat.
-- Changes to Notion only happen during `/init`, `/weekly` or `/write`, after your explicit go-ahead.
-- Never commit `.env`.
+## FAQ
+
+**Do I need to know how to code?** No. You paste a few commands, and Claude Code explains and does the rest.
+
+**My company doesn't use Notion.** Notion is required for now: it is the one place the assistant answers from.
+The other tools (Drive, Confluence exports, Slack...) can fill it during `/init`.
+
+**Which AI answers my team?** The one you choose: Anthropic, OpenAI, Google, Mistral, OpenRouter, DeepSeek, Groq,
+xAI, or your own server. You can switch from the admin page, without redeploying.
+
+**Can I add knowledge that is not in any tool yet?** Yes: tell Claude the facts, or give it a document, with
+`/write`. It finds the right Notion page and shows you the text before writing.
+
+**Can the assistant change things in my tools?** No. Your tools are only read, and Notion only changes after your
+OK.
+
+**What happens when it doesn't know?** It says *"This is not documented yet"* and notes the question. At the next
+`/weekly`, Claude looks for the answer in your tools and proposes to add it to Notion.
+
+**How do I get new versions of OpenBrain?** `npm run openbrain -- upgrade --repo arthczer-555/openbrain` shows what
+would change, `--yes` applies it. It only replaces OpenBrain's own files, never your knowledge or your settings.
+
+**Something doesn't work.** Run `npm run openbrain -- doctor`, or ask Claude in the folder: it knows the project.
 
 ## Roadmap
 
-- 🔜 A built-in Slack input (today: the Slack connector of Claude Code or a Slack MCP server), the weekly
-  update without Claude Code (any provider), public landing page and docs (code in `apps/site`).
-- 🔜 Later: Slack bot, per-group access control.
+- 🔜 A built-in Slack reader (today: the Slack connector for Claude), the weekly update without Claude Code, the
+  public website and documentation.
+- 🔜 Later: a Slack bot, access rights per team.
 
 ## Contributing
 
+See [CONTRIBUTING.md](CONTRIBUTING.md). Quick check before a pull request:
+
 ```bash
-npm install
-npm test             # unit tests (vitest)
-npm run typecheck    # strict TypeScript
-npm run e2e          # end to end: demo + headless Chrome (question, citation, feedback, admin, mobile)
+npm install && npm test && npm run typecheck && npm run e2e
 ```
 
-| Folder | Content |
-|---|---|
-| `packages/core` | Knowledge format, loader, registry, lint, guide, budgets, config. |
-| `packages/retrieval` | Markdown chunker and dependency-free BM25F search. |
-| `packages/connectors` | Notion sync and the input tools (files, web, GitHub, Google Drive, any MCP server, any REST API). |
-| `packages/llm` | Model layer: every provider, catalog, prices, fallbacks. |
-| `packages/agent` | Prompt assembly, agent loop, tools, budgets, citations. |
-| `packages/server` | Chat API, used by `serve`, `demo` and the Netlify functions. |
-| `packages/cli` | The `openbrain` command. |
-| `apps/web` | Chat, knowledge browser and admin UI. |
-| `apps/site` | Landing page and docs (Astro + Starlight), published from the upstream repo only. |
-| `netlify/`, `netlify.toml` | Functions, edge sign-in guard and build. |
-| `.claude/skills/` | `/setup`, `/init`, `/weekly`, `/write`. |
-| `examples/acme` | Fictional company used for the demo, the tests and the evals. Never put real company data in this repo. |
+The code layout is in the [reference](REFERENCE.md#code-layout). Never put real company data in this repo: the
+examples use the made-up company Acme.
 
 ## License
 

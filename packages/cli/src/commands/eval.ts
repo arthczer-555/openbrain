@@ -143,7 +143,7 @@ export const evalCommand: CommandDefinition = {
       const effort = effortFlag as "low" | "medium" | "high" | undefined;
       const base: ModelSpec[][] = matrix
         ? matrix.split(",").map((id) => [{ ref: parseRef(id.trim()), effort: "low" as const }])
-        : [await chatSpecs(root, stringFlag(args, "model"))];
+        : [await chatSpecs(root, stringFlag(args, "model"), { subscriptionFallback: true })];
       // --effort overrides the effort of the model under test (compare a model at low, medium and high).
       const chains = effort ? base.map((chain) => chain.map((spec) => ({ ...spec, effort }))) : base;
       for (const chain of chains) {

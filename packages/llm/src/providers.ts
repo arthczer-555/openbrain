@@ -4,6 +4,7 @@ import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import type { LanguageModel } from "ai";
+import { ClaudeCodeLanguageModel } from "./claude-code.ts";
 import { DemoLanguageModel } from "./demo.ts";
 import { LlmError, type ModelRef } from "./types.ts";
 
@@ -11,7 +12,7 @@ import { LlmError, type ModelRef } from "./types.ts";
 // OpenAI-compatible protocol for the long tail: OpenRouter, DeepSeek, Groq, xAI, Ollama, vLLM, LiteLLM,
 // and the OpenAI-compatible endpoints of Azure, Bedrock and Vertex. No model name is hard-coded here.
 
-export type ProviderKind = "anthropic" | "openai" | "google" | "mistral" | "openai-compatible" | "demo";
+export type ProviderKind = "anthropic" | "openai" | "google" | "mistral" | "openai-compatible" | "demo" | "claude-code";
 
 export interface ProviderDef {
   id: string;
@@ -66,6 +67,14 @@ export const BUILTIN_PROVIDERS: readonly ProviderDef[] = [
     tested: true,
   },
   { id: "demo", label: "Demo (no LLM, extractive)", kind: "demo", envKeys: [], keyless: true },
+  {
+    id: "claude-code",
+    label: "Claude Code (your subscription, terminal only)",
+    kind: "claude-code",
+    envKeys: [],
+    keyless: true,
+    local: true,
+  },
 ];
 
 /** An OpenAI-compatible endpoint declared by the instance (`providers.openai_compatible` in the config). */
@@ -164,6 +173,8 @@ export function createLanguageModel(registry: ProviderRegistry, ref: ModelRef, o
       const delayMs = Number(options.env.OPENBRAIN_DEMO_DELAY_MS ?? "0");
       return new DemoLanguageModel(ref.model, { delayMs: Number.isFinite(delayMs) ? delayMs : 0 });
     }
+    case "claude-code":
+      return new ClaudeCodeLanguageModel(ref.model, { ...(options.env.OPENBRAIN_CLAUDE_BIN ? { command: options.env.OPENBRAIN_CLAUDE_BIN } : {}) });
   }
 }
 
@@ -249,6 +260,11 @@ export async function listProviderModels(
     }
     case "demo":
       push("extractive", "Demo: quotes the best passages, no LLM");
+      break;
+    case "claude-code":
+      push("sonnet", "Claude Sonnet through Claude Code");
+      push("opus", "Claude Opus through Claude Code");
+      push("haiku", "Claude Haiku through Claude Code");
       break;
   }
   return out.sort((a, b) => a.id.localeCompare(b.id));

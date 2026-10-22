@@ -51,6 +51,7 @@ The setup and the weekly update do not use these models: they run in Claude Code
 | Ollama | `ollama` | none | OpenAI-compatible, `http://localhost:11434/v1`, local only (see below) |
 | Any OpenAI-compatible endpoint | your name | `api_key_env` | vLLM, an internal proxy, the OpenAI-compatible endpoints of Azure, Bedrock or Vertex |
 | Demo | `demo` | none | `demo:extractive`, no LLM (see below) |
+| Claude Code | `claude-code` | none: your Claude subscription | `claude-code:sonnet`, local tests only (see below) |
 
 ```yaml
 providers:
@@ -110,6 +111,14 @@ The default, `chatbot.mode: auto`, picks the mode from the model's capabilities;
 the best passages with their citations, and reports a gap when nothing matches. It exists so the whole chain (agent
 loop, citations, flags, streaming, UI) runs for real in `npm run demo` and in the tests. It does not reason or
 rephrase: add `--llm` to the demo to use the model of the config.
+
+## Testing on your Claude subscription
+
+`claude-code:sonnet` (or `opus`, `haiku`) answers through your own Claude Code (`claude -p`), on your Claude
+subscription, with no API key. `ask` and `eval` use it on their own when no key of the configured models is set, and
+`serve --model claude-code:sonnet` opens the chat page locally with it. Each call is isolated: no tool, no MCP server,
+no session saved. It has no tools, so the assistant runs in retrieval-first mode. It never runs on Netlify: the
+online chat page needs an API key.
 
 ## Embeddings (hybrid search)
 

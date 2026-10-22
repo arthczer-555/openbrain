@@ -35,7 +35,9 @@ pipelines, URL prefixes). Nothing is ever written through an input.
 
 1. **A connector of Claude Code** (first choice when it exists). Check the MCP tools available in this
    session. If the tool has a claude.ai connector that is not enabled, ask the operator to enable it on
-   claude.ai (Settings > Connectors). If it has an MCP server, give the command to run in the repo folder
+   claude.ai (Customize > Connectors, claude.ai/customize/connectors; on Team and Enterprise plans an owner enables it
+   first). The README lists the addresses of popular tools, and their read-only addresses when they exist (prefer
+   those). If it has an MCP server, give the command to run in the repo folder
    (`claude mcp add --transport http <name> <url>`, or `claude mcp add <name> -- <command>` for a local
    server) and ask them to sign in with `/mcp`. Then call one read tool on a small window to confirm access,
    and declare it with its scope:
@@ -80,7 +82,11 @@ npm run openbrain -- lint
 npm run openbrain -- guide build
 npm run openbrain -- eval --no-llm
 npm run openbrain -- ask "<a real question>"
+npm run openbrain -- eval
 ```
+
+Without an API key, `ask` and `eval` answer through Claude Code on the operator's subscription
+(`claude-code:sonnet`): no key is needed to test. The online chat page will need one (step 6).
 
 Write `brain/core.md` (identity and golden rules, 1,200-token budget): start from the template one, add at
 most 10 instance rules.
@@ -89,6 +95,9 @@ most 10 instance rules.
 `git config core.hooksPath .githooks` enables the pre-push guard (`openbrain doctor` before every push).
 `npm run openbrain -- doctor` lists what is left before production.
 
-Then `npm run openbrain -- deploy` shows the plan (checks, secrets, Netlify variables); `--yes` runs it, writes
-`OPENBRAIN_URL` and `ADMIN_TOKEN` to `.env`, and prints the access code once. Remind the operator of the
+Then `npm run openbrain -- deploy` shows the plan (checks, secrets, Netlify variables). Before `--yes`, ask the
+operator for the chat's access code (8 characters or more), or none: no sign-in page, anyone with the link can
+read the knowledge through the chat, so say it plainly and get a clear yes. Run `deploy --yes --password <code>`
+or `deploy --yes --no-password` (the command cannot prompt from here). It writes `OPENBRAIN_URL` and `ADMIN_TOKEN`
+to `.env`, and prints the codes once. Remind the operator of the
 weekly routine: `claude` then `/weekly`, once a week.

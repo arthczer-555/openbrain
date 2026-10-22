@@ -15,7 +15,7 @@ with your go-ahead. The chatbot never queries an input.
 | **A built-in input** | Local files, websites, GitHub, Google Drive | `inputs.files`, `web`, `github`, `gdrive` |
 | **A generic adapter** | Any other MCP server or REST API, collected by the CLI: free and reproducible | `inputs.mcp.<name>`, `inputs.api.<name>` |
 
-To connect a tool to Claude Code, enable its connector on claude.ai (*Settings* → *Connectors*), or add its MCP server
+To connect a tool to Claude Code, enable its connector on claude.ai (*Customize* → *Connectors*), or add its MCP server
 from the repo folder and sign in with `/mcp`:
 
 ```bash

@@ -89,7 +89,9 @@ is not written; it stays in `state/pending.json` and comes back at the top of th
 
 ## Between two updates
 
-- `/write` adds or fixes one piece of knowledge in Notion, with the same checks, then syncs and publishes.
+- `/write` adds knowledge on request, with the same checks, then syncs and publishes: a single fact, a document, or a
+  whole topic gathered from your connected tools ("document how our codebase is organized", "build a sales playbook
+  from HubSpot and our call recordings", "gather our marketing guidelines from Drive and Slack").
 - `npm run openbrain -- reports` lists what the chatbot flagged since the last update.
 
 ## Not forgetting it
